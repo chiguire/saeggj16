@@ -1,5 +1,6 @@
 package;
 
+import enemy.Monster;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -8,9 +9,16 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.util.FlxMath;
+import flixel.util.FlxRandom;
 import orb.EnergyOrb;
+import orb.EnergyOrbTypeEnum;
+import orb.RecipeManager;
+import player.EnergyCollector;
+import player.EnerygyCollectorState.EnergyCollectorState;
 import player.PlayerHand;
 import player.PlayerHandMouse;
+
+using flixel.util.FlxSpriteUtil;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -20,7 +28,12 @@ class PlayState extends FlxState
 	var playerLHand:PlayerHand;
 	var playerRHand:PlayerHand;
 	
+	var playerEnergyCollector:EnergyCollector;
+	var enemyBoss:Monster;
+	
+	public var playerHands:FlxSpriteGroup;
 	public var eneryOrbs:FlxSpriteGroup;
+	public var playerEnergyCollectors:FlxSpriteGroup;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -29,10 +42,16 @@ class PlayState extends FlxState
 	{
 		super.create();
 		
+		RecipeManager.load_recipe();
+		
+		playerEnergyCollectors = new FlxSpriteGroup();
+		add(playerEnergyCollectors);
 		eneryOrbs = new FlxSpriteGroup();
 		add(eneryOrbs);
+		playerHands = new FlxSpriteGroup();
+		add(playerHands);
 		
-		var orb = new orb.EnergyOrb(200, 50);
+		var orb = new orb.EnergyOrb(this, 200, 50);
 		orb.create();
 		eneryOrbs.add(orb);
 		
@@ -46,8 +65,20 @@ class PlayState extends FlxState
 		playerRHand.controlMapping("I", "J", "K", "L", "H");
 		playerRHand.type = "R";
 		
-		add(playerLHand);
-		add(playerRHand);
+		playerHands.add(playerLHand);
+		playerHands.add(playerRHand);
+		
+		playerEnergyCollector = new EnergyCollector();
+		playerEnergyCollector.create();
+		playerEnergyCollector.screenCenter();
+		playerEnergyCollector.playerLHand = playerLHand;
+		playerEnergyCollector.playerRHand = playerRHand;
+		playerEnergyCollectors.add(playerEnergyCollector);
+		
+		enemyBoss = new Monster();
+		enemyBoss.create();
+		enemyBoss.screenCenter(); enemyBoss.y += 64; 
+		add(enemyBoss);
 	}
 	
 	/**
@@ -68,9 +99,31 @@ class PlayState extends FlxState
 		
 		if (FlxG.mouse.justPressed)
 		{
-			var newOrb = new EnergyOrb(FlxG.mouse.x, FlxG.mouse.y);
+			var newOrb = new EnergyOrb(this, FlxG.mouse.x, FlxG.mouse.y);
 			newOrb.create();
+			newOrb.orbtype = EnergyOrbTypeEnum.Blue;
 			eneryOrbs.add(newOrb);
 		}
-	}	
+		
+		if (FlxG.keys.justPressed.T)
+		{
+			var arry = Type.allEnums(EnergyOrbTypeEnum);
+			var def = FlxRandom.getObject(arry, 1, arry.length);
+			{
+				enemyBoss.add_token(def);
+			}
+		}
+		
+		FlxG.overlap(playerEnergyCollectors, eneryOrbs, on_energy_orb_collection_completed);
+	}
+	
+	function on_energy_orb_collection_completed(p:EnergyCollector, e:EnergyOrb):Void
+	{
+		if (p.state == EnergyCollectorState.ACTIVATED)
+		{
+			//trace("collection completed");
+			e.kill();
+			enemyBoss.remove_token(e.orbtype);
+		}
+	}
 }
