@@ -1,6 +1,7 @@
 package graphics;
 
 import flixel.group.FlxSpriteGroup;
+import flixel.input.FlxAccelerometer;
 import flixel.util.FlxPoint;
 import flixel.addons.display.shapes.FlxShapeCircle;
 import flixel.util.FlxSpriteUtil.FillStyle;
@@ -15,13 +16,15 @@ class Arm extends FlxSpriteGroup
 {
 	public var base_position : FlxPoint;
 	public var arm_angle : Float;
+	public var arm_angle_min : Float;
+	public var arm_angle_max : Float;
 	public var arm_length : Float;
 	public var points : Int;
 	
 	static var ls : LineStyle = { thickness: 3, color: 0xf0f0f0 };
 	static var fs : FillStyle = { hasFill: true, color: FlxColor.WHITE, alpha: 1.0 };
 	
-	public function new(X:Float, Y:Float, starting_angle : Float, arm_length:Int, points:Int) 
+	public function new(X:Float, Y:Float, starting_angle : Float, starting_angle_min : Float, starting_angle_max : Float, arm_length:Int, points:Int) 
 	{
 		super(X, Y, points);
 		

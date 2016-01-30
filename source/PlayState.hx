@@ -3,21 +3,51 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
+import flixel.util.FlxColor;
 import flixel.util.FlxMath;
+import orb.EnergyOrb;
+import player.PlayerHand;
+import player.PlayerHandMouse;
 
 /**
  * A FlxState which can be used for the actual gameplay.
  */
 class PlayState extends FlxState
 {
+	var playerLHand:PlayerHand;
+	var playerRHand:PlayerHand;
+	
+	public var eneryOrbs:FlxSpriteGroup;
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
 	override public function create():Void
 	{
 		super.create();
+		
+		eneryOrbs = new FlxSpriteGroup();
+		add(eneryOrbs);
+		
+		var orb = new orb.EnergyOrb(200, 50);
+		orb.create();
+		eneryOrbs.add(orb);
+		
+		playerLHand = new PlayerHand(this, 100, 100);
+		playerLHand.create();
+		playerLHand.color = FlxColor.GOLDEN;
+		playerLHand.type = "L";
+		playerLHand.controlMapping("W", "A", "S", "D", "F");
+		playerRHand = new PlayerHand(this, 300, 100);
+		playerRHand.create();
+		playerRHand.controlMapping("I", "J", "K", "L", "H");
+		playerRHand.type = "R";
+		
+		add(playerLHand);
+		add(playerRHand);
 	}
 	
 	/**
@@ -35,5 +65,12 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
+		
+		if (FlxG.mouse.justPressed)
+		{
+			var newOrb = new EnergyOrb(FlxG.mouse.x, FlxG.mouse.y);
+			newOrb.create();
+			eneryOrbs.add(newOrb);
+		}
 	}	
 }
