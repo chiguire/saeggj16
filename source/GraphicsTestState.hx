@@ -43,6 +43,12 @@ class GraphicsTestState extends FlxState
 	public var cursor_right_x : Float;
 	public var cursor_right_y : Float;
 	
+	public var left_hand : FlxSprite;
+	public var right_hand : FlxSprite;
+	
+	public var left_distance : Float;
+	public var right_distance : Float;
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -68,6 +74,23 @@ class GraphicsTestState extends FlxState
 		m = new Matrix(1, 0, 0, 1, 0, 0);
 		spr = new FlxSprite(0, 0);
 		add(spr);
+		
+		left_hand = new FlxSprite();
+		left_hand.makeGraphic(32, 32);
+		left_hand.centerOffsets();
+		left_hand.centerOrigin();
+		left_hand.x = FlxG.width / 2 - 100;
+		left_hand.y = FlxG.height / 3;
+		
+		right_hand = new FlxSprite();
+		right_hand.makeGraphic(32, 32);
+		right_hand.centerOffsets();
+		right_hand.centerOrigin();
+		right_hand.x = FlxG.width / 2 + 100;
+		right_hand.y = FlxG.height / 3;
+		
+		add(left_hand);
+		add(right_hand);
 	}
 	
 	/**
@@ -99,9 +122,41 @@ class GraphicsTestState extends FlxState
 		bd.draw(sprsrc, m);
 		spr.loadGraphic(bd);
 		
-		if (FlxG.keys.justPressed.A)
+		if (FlxG.keys.pressed.W && left_in_distance(0,-1))
 		{
-			Reg.inputdata.fill_random();
+			left_hand.y -= 1;
+		}
+		else if (FlxG.keys.pressed.S && left_in_distance(0,1))
+		{
+			left_hand.y += 1;
+		}
+		
+		if (FlxG.keys.pressed.A && left_in_distance(-1, 0))
+		{
+			left_hand.x -= 1;
+		}
+		else if (FlxG.keys.pressed.D && left_in_distance(1, 0))
+		{
+			left_hand.x += 1;
+		}
+		
+		
+		if (FlxG.keys.pressed.I && right_in_distance(0, -1))
+		{
+			right_hand.y -= 1;
+		}
+		else if (FlxG.keys.pressed.K && right_in_distance(0, 1))
+		{
+			right_hand.y += 1;
+		}
+		
+		if (FlxG.keys.pressed.J && right_in_distance(-1, 0))
+		{
+			right_hand.x -= 1;
+		}
+		else if (FlxG.keys.pressed.L && right_in_distance(1, 0))
+		{
+			right_hand.x += 1;
 		}
 		
 		var face_height = Reg.inputdata.v(FACE_HEIGHT);
@@ -113,6 +168,9 @@ class GraphicsTestState extends FlxState
 		Reg.inputdata.value(PUPIL_DIRECTION_Y).value = (FlxG.mouse.y - elh) / FlxG.height * 2;
 		Reg.inputdata.value(EYE_CLOSENESS).value = (Math.sin(a0 * Math.PI / 45) * 5) - 4;
 		Reg.inputdata.value(LEGS_SPREADNESS).value = (Math.sin(a1 * Math.PI / 180) + 1) / 2.0;
+		
+		FlxG.watch.add(this, "left0_angle");
+		FlxG.watch.add(this, "left1_angle");
 	}
 	
 	public function draw_body()
@@ -236,22 +294,28 @@ class GraphicsTestState extends FlxState
 		var skin_color = FlxColorUtil.makeFromHSBA(Reg.inputdata.v(SKIN_HUE), Reg.inputdata.v(SKIN_SATURATION), Reg.inputdata.v(SKIN_VALUE), 1.0);
 		var torso_height = Reg.inputdata.v(TORSO_HEIGHT);
 		var chest_width = Reg.inputdata.v(CHEST_WIDTH);
+		
+		var arm0_start_left_x = body_x - chest_width / 2 + 16;
+		var arm0_start_left_y = body_y - torso_height + 16;
+		var arm0_start_right_x = body_x + chest_width / 2 - 16;
+		var arm0_start_right_y = body_y - torso_height + 16;
+		var arm_length = 80;
+		
+		ik_solve(arm0_start_left_x, arm0_start_left_y, left_hand.x, left_hand.y, true, arm_length, arm_length, true);
+		ik_solve(arm0_start_right_x, arm0_start_right_y, right_hand.x, right_hand.y, false, arm_length, arm_length, false);
+		
 		var arm_left0_angle = Reg.inputdata.v(ARM_LEFT0_ANGLE);
 		var arm_left1_angle = Reg.inputdata.v(ARM_LEFT1_ANGLE);
 		var arm_right0_angle = Reg.inputdata.v(ARM_RIGHT0_ANGLE);
 		var arm_right1_angle = Reg.inputdata.v(ARM_RIGHT1_ANGLE);
 		
-		g.lineStyle();
-		
-		var arm_length = 80;
-		
-		var arm1_start_left_x = evaluate_left_arm_x(body_x - chest_width / 2 + 16, body_y - torso_height + 16, arm_length, arm_left0_angle, 1.0);
-		var arm1_start_left_y = evaluate_left_arm_y(body_x - chest_width / 2 + 16, body_y - torso_height + 16, arm_length, arm_left0_angle, 1.0);
+		var arm1_start_left_x = evaluate_left_arm_x(arm0_start_left_x, arm0_start_left_y, arm_length, arm_left0_angle, 1.0);
+		var arm1_start_left_y = evaluate_left_arm_y(arm0_start_left_x, arm0_start_left_y, arm_length, arm_left0_angle, 1.0);
 		var arm1_end_left_x = evaluate_left_arm_x(arm1_start_left_x, arm1_start_left_y, arm_length, arm_left0_angle+arm_left1_angle, 1.0);
 		var arm1_end_left_y = evaluate_left_arm_y(arm1_start_left_x, arm1_start_left_y, arm_length, arm_left0_angle+arm_left1_angle, 1.0);
 		
-		var arm1_start_right_x = evaluate_right_arm_x(body_x + chest_width / 2 - 16, body_y - torso_height + 16, arm_length, arm_right0_angle, 1.0);
-		var arm1_start_right_y = evaluate_right_arm_y(body_x + chest_width / 2 - 16, body_y - torso_height + 16, arm_length, arm_right0_angle, 1.0);	
+		var arm1_start_right_x = evaluate_right_arm_x(arm0_start_right_x, arm0_start_right_y, arm_length, arm_right0_angle, 1.0);
+		var arm1_start_right_y = evaluate_right_arm_y(arm0_start_right_x, arm0_start_right_y, arm_length, arm_right0_angle, 1.0);	
 		var arm1_end_right_x = evaluate_right_arm_x(arm1_start_right_x, arm1_start_right_y, arm_length, arm_right0_angle+arm_right1_angle, 1.0);
 		var arm1_end_right_y = evaluate_right_arm_y(arm1_start_right_x, arm1_start_right_y, arm_length, arm_right0_angle+arm_right1_angle, 1.0);
 		
@@ -268,12 +332,12 @@ class GraphicsTestState extends FlxState
 	
 	public function evaluate_left_arm_x(x_start:Float, y_start:Float, arm_length:Float, arm_angle:Float, t:Float) : Float
 	{
-		return x_start - arm_length * t * Math.cos(arm_angle * Math.PI / 180);
+		return x_start + arm_length * t * Math.cos(arm_angle * Math.PI / 180);
 	}
 	
 	public function evaluate_left_arm_y(x_start:Float, y_start:Float, arm_length:Float, arm_angle:Float, t:Float) : Float
 	{
-		return y_start - arm_length * t * Math.sin(arm_angle * Math.PI / 180);
+		return y_start + arm_length * t * Math.sin(arm_angle * Math.PI / 180);
 	}
 	
 	public function evaluate_right_arm_x(x_start:Float, y_start:Float, arm_length:Float, arm_angle:Float, t:Float) : Float
@@ -283,30 +347,124 @@ class GraphicsTestState extends FlxState
 	
 	public function evaluate_right_arm_y(x_start:Float, y_start:Float, arm_length:Float, arm_angle:Float, t:Float) : Float
 	{
-		return y_start - arm_length * t * Math.sin(arm_angle * Math.PI / 180);
+		return y_start + arm_length * t * Math.sin(arm_angle * Math.PI / 180);
 	}
 	
-	public function ik_solve(target:FlxSprite)
+	public function ik_solve(arm0_start_x:Float, arm0_start_y:Float, target_x:Float, target_y:Float, solve_positive_angle1 : Bool, arm0_length:Float, arm1_length:Float, modify_left_arm:Bool) : Bool
 	{
-		//l_arm_angle += solve_ik_solve(left_arm_2, target);
-		//l_sidearm_angle += solve_ik_solve(left_arm_1, target);
-		//r_brush_angle += solve_ik_solve(right_arm_3, target);
-		//r_arm_angle += solve_ik_solve(right_arm_2, target);
-		//r_sidearm_angle += solve_ik_solve(right_arm_1, target);
+		var epsilon = 0.0001;
+		var found_valid_solution = true;
+		
+		var x = (target_x - arm0_start_x);
+		var y = (target_y - arm0_start_y);
+		
+		var target_dist_sqr = (x * x + y * y);
+		
+		var sin_angle1;
+		var cos_angle1;
+		
+		var angle0 : Float;
+		var angle1 : Float;
+		
+		var cos_angle1_denom = 2 * arm0_length * arm1_length;
+		if (cos_angle1_denom > epsilon)
+		{
+			cos_angle1 = (target_dist_sqr - arm0_length * arm0_length - arm1_length * arm1_length) / (cos_angle1_denom);
+			
+			if (cos_angle1 < -1.0 || cos_angle1 > 1.0)
+			{
+				found_valid_solution = false;
+			}
+			
+			cos_angle1 = Math.max( -1, Math.min( 1, cos_angle1));
+			angle1 = Math.acos(cos_angle1);
+			
+			if (!solve_positive_angle1)
+			{
+				angle1 = -angle1;
+			}
+			
+			sin_angle1 = Math.sin(angle1);
+		}
+		else
+		{
+			var total_len_sqr = (arm0_length + arm1_length) * (arm0_length + arm1_length);
+			
+			if (target_dist_sqr < (total_len_sqr - epsilon) ||
+			    target_dist_sqr > (total_len_sqr + epsilon))
+			{
+				found_valid_solution = false;
+			}
+			
+			angle1 = 0;
+			cos_angle1 = 1;
+			sin_angle1 = 0;
+		}
+		
+		var tri_adjacent = arm0_length + arm1_length * cos_angle1;
+		var tri_opposite = arm1_length * sin_angle1;
+		
+		var tan_y = y * tri_adjacent - x * tri_opposite;
+		var tan_x = x * tri_adjacent + y * tri_opposite;
+		
+		angle0 = Math.atan2(tan_y, tan_x);
+		
+		if (found_valid_solution)
+		{
+			if (modify_left_arm)
+			{
+				Reg.inputdata.value(ARM_LEFT0_ANGLE).value = angle0 * 180 / Math.PI;
+				Reg.inputdata.value(ARM_LEFT1_ANGLE).value = angle1 * 180 / Math.PI;
+			}
+			else
+			{
+				Reg.inputdata.value(ARM_RIGHT0_ANGLE).value = angle0 * 180 / Math.PI;
+				Reg.inputdata.value(ARM_RIGHT1_ANGLE).value = angle1 * 180 / Math.PI;
+			}
+		}
+		
+		return found_valid_solution;
 	}
 	
-	private function solve_ik_solve(arm:FlxSprite, target:FlxSprite)
+	public function left_in_distance(x_dir:Float, y_dir:Float) : Bool
 	{
-		//var v = FlxVector.get(0, arm.height - 20);
-		//v.rotateByDegrees(arm.angle);
-		//var v_p = FlxVector.get(v.x, v.y);
-		//v_p.rotateByDegrees(90);
-		//
-		//var v_f = FlxVector.get((target.x + target.origin.x) - (arm.x + arm.origin.x + v.x),
-		//						(target.y + target.origin.y) - (arm.y + arm.origin.y + v.y));
-		//
-		//var dot_product = v_f.dotProdWithNormalizing(v_p);
-		//
-		//return dot_product*0.005;
+		var torso_height = Reg.inputdata.v(TORSO_HEIGHT);
+		var chest_width = Reg.inputdata.v(CHEST_WIDTH);
+		
+		var arm0_start_left_x = body_x - chest_width / 2 + 16;
+		var arm0_start_left_y = body_y - torso_height + 16;
+		
+		var max_distance = (80+80) * (80+80); //arm_length*arm_length
+		
+		var temp_left_distance = (left_hand.x + x_dir - arm0_start_left_x) * (left_hand.x + x_dir - arm0_start_left_x) + (left_hand.y + y_dir - arm0_start_left_y) * (left_hand.y + y_dir - arm0_start_left_y);
+		
+		if (temp_left_distance <= max_distance)
+		{
+			left_distance = temp_left_distance;
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public function right_in_distance(x_dir:Float, y_dir:Float) : Bool
+	{
+		var torso_height = Reg.inputdata.v(TORSO_HEIGHT);
+		var chest_width = Reg.inputdata.v(CHEST_WIDTH);
+		
+		var arm0_start_right_x = body_x + chest_width / 2 - 16;
+		var arm0_start_right_y = body_y - torso_height + 16;
+		
+		var max_distance = (80+80) * (80+80); //arm_length*arm_length
+		
+		var temp_right_distance = (right_hand.x - arm0_start_right_x) * (right_hand.x - arm0_start_right_x) + (right_hand.y - arm0_start_right_y) * (right_hand.y - arm0_start_right_y);
+		
+		if (temp_right_distance <= max_distance)
+		{
+			right_distance = temp_right_distance;
+			return true;
+		}
+		
+		return false;
 	}
 }

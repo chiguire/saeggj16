@@ -70,10 +70,10 @@ class Reg
 		inputdata.insert_value(HIP_WIDTH, 100, 80, 140);
 		inputdata.insert_value(LEGS_LENGTH, 150, 140, 200);
 		inputdata.insert_value(LEGS_SPREADNESS, 0.5, 0, 1.0);
-		inputdata.insert_value(ARM_LEFT0_ANGLE, 0, -45, 45);
-		inputdata.insert_value(ARM_LEFT1_ANGLE, 0, 0, 80);
-		inputdata.insert_value(ARM_RIGHT0_ANGLE, 0, -45, 45);
-		inputdata.insert_value(ARM_RIGHT1_ANGLE, 0, 0, 80);
+		inputdata.insert_value(ARM_LEFT0_ANGLE, 0, -360, 360);
+		inputdata.insert_value(ARM_LEFT1_ANGLE, 0, -360, 360);
+		inputdata.insert_value(ARM_RIGHT0_ANGLE, 0, -360, 360);
+		inputdata.insert_value(ARM_RIGHT1_ANGLE, 0, -360, 360);
 		inputdata.fill_random();
 	};
 }
