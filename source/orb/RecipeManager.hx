@@ -20,6 +20,8 @@ class RecipeManager
 				o.update_properties(EnergyOrbTypeEnum.Red); return true; 
 			case "RR":
 				o.update_properties(EnergyOrbTypeEnum.Blue); return true;
+			case "LR":
+				o.update_properties(EnergyOrbTypeEnum.Green); return true;
 		}
 		
 		return false;

@@ -9,9 +9,12 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.util.FlxMath;
 import orb.EnergyOrb;
+import orb.EnergyOrbTypeEnum;
 import player.EnergyCollector;
 import player.PlayerHand;
 import player.PlayerHandMouse;
+
+using flixel.util.FlxSpriteUtil;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -25,6 +28,7 @@ class PlayState extends FlxState
 	
 	public var playerHands:FlxSpriteGroup;
 	public var eneryOrbs:FlxSpriteGroup;
+	public var playerEnergyCollectors:FlxSpriteGroup;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -33,12 +37,14 @@ class PlayState extends FlxState
 	{
 		super.create();
 		
+		playerEnergyCollectors = new FlxSpriteGroup();
+		add(playerEnergyCollectors);
 		eneryOrbs = new FlxSpriteGroup();
 		add(eneryOrbs);
 		playerHands = new FlxSpriteGroup();
 		add(playerHands);
 		
-		var orb = new orb.EnergyOrb(200, 50);
+		var orb = new orb.EnergyOrb(this, 200, 50);
 		orb.create();
 		eneryOrbs.add(orb);
 		
@@ -54,6 +60,13 @@ class PlayState extends FlxState
 		
 		playerHands.add(playerLHand);
 		playerHands.add(playerRHand);
+		
+		playerEnergyCollector = new EnergyCollector();
+		playerEnergyCollector.create();
+		playerEnergyCollector.screenCenter();
+		playerEnergyCollector.playerLHand = playerLHand;
+		playerEnergyCollector.playerRHand = playerRHand;
+		playerEnergyCollectors.add(playerEnergyCollector);
 	}
 	
 	/**
@@ -74,8 +87,9 @@ class PlayState extends FlxState
 		
 		if (FlxG.mouse.justPressed)
 		{
-			var newOrb = new EnergyOrb(FlxG.mouse.x, FlxG.mouse.y);
+			var newOrb = new EnergyOrb(this, FlxG.mouse.x, FlxG.mouse.y);
 			newOrb.create();
+			newOrb.orbtype = EnergyOrbTypeEnum.Blue;
 			eneryOrbs.add(newOrb);
 		}
 	}	

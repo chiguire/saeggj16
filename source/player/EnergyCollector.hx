@@ -4,23 +4,19 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxColor;
+import player.EnerygyCollectorState.EnergyCollectorState;
 
 /**
  * ...
  * @author 
- */
-enum EnergyCollectorState
-{
-	IDLE;
-	ACTIVATED;
-}
- 
+ */ 
 class EnergyCollector extends FlxSprite
 {
-	var state = EnergyCollectorState.IDLE;
+	public var state = EnergyCollectorState.IDLE;
 	
 	// player hands overlapping test
-	public var playerHands:FlxSpriteGroup;
+	public var playerLHand:PlayerHand;
+	public var playerRHand:PlayerHand;
 
 	public function new(X:Float=0, Y:Float=0, ?SimpleGraphic:Dynamic) 
 	{
@@ -37,6 +33,16 @@ class EnergyCollector extends FlxSprite
 	{
 		super.update();
 		
-		//FlxG.overlap(this, playerHands, onPlayerHandsOverlap);
+		var lhandOverlapping = FlxG.overlap(this, playerLHand);
+		var rhandOverlapping = FlxG.overlap(this, playerRHand);
+		if (lhandOverlapping && rhandOverlapping)
+		{
+			//trace("drawing power");
+			state = EnergyCollectorState.ACTIVATED;
+		}
+		else 
+		{
+			state = EnergyCollectorState.IDLE;
+		}
 	}
 }
