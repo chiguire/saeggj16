@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
@@ -17,6 +18,9 @@ class PlayState extends FlxState
 {
 	var playerLHand:PlayerHand;
 	var playerRHand:PlayerHand;
+	
+	public var eneryOrbs:FlxSpriteGroup;
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -24,13 +28,22 @@ class PlayState extends FlxState
 	{
 		super.create();
 		
-		playerLHand = new PlayerHand(100, 100);
+		eneryOrbs = new FlxSpriteGroup();
+		add(eneryOrbs);
+		
+		var orb = new orb.EnergyOrb(200, 50);
+		orb.create();
+		eneryOrbs.add(orb);
+		
+		playerLHand = new PlayerHand(this, 100, 100);
 		playerLHand.create();
 		playerLHand.color = FlxColor.GOLDEN;
+		playerLHand.type = "L";
 		playerLHand.controlMapping("W", "A", "S", "D", "F");
-		playerRHand = new PlayerHand(300, 100);
+		playerRHand = new PlayerHand(this, 300, 100);
 		playerRHand.create();
 		playerRHand.controlMapping("I", "J", "K", "L", "H");
+		playerRHand.type = "R";
 		
 		add(playerLHand);
 		add(playerRHand);
