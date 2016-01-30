@@ -9,6 +9,7 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.util.FlxMath;
 import orb.EnergyOrb;
+import player.EnergyCollector;
 import player.PlayerHand;
 import player.PlayerHandMouse;
 
@@ -20,6 +21,9 @@ class PlayState extends FlxState
 	var playerLHand:PlayerHand;
 	var playerRHand:PlayerHand;
 	
+	var playerEnergyCollector:EnergyCollector;
+	
+	public var playerHands:FlxSpriteGroup;
 	public var eneryOrbs:FlxSpriteGroup;
 	
 	/**
@@ -31,6 +35,8 @@ class PlayState extends FlxState
 		
 		eneryOrbs = new FlxSpriteGroup();
 		add(eneryOrbs);
+		playerHands = new FlxSpriteGroup();
+		add(playerHands);
 		
 		var orb = new orb.EnergyOrb(200, 50);
 		orb.create();
@@ -46,8 +52,8 @@ class PlayState extends FlxState
 		playerRHand.controlMapping("I", "J", "K", "L", "H");
 		playerRHand.type = "R";
 		
-		add(playerLHand);
-		add(playerRHand);
+		playerHands.add(playerLHand);
+		playerHands.add(playerRHand);
 	}
 	
 	/**

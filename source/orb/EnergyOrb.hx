@@ -28,7 +28,9 @@ class EnergyOrb extends FlxSprite
 		super(X, Y, SimpleGraphic);
 		
 		recording_state_timer = new FlxTimer(recording_state_idle_time, on_recording_state_idle_timeup);
+		recording_state_timer.active = false;
 		collectable_state_timer = new FlxTimer(collectable_state_time, on_collectable_state_timeup);
+		collectable_state_timer.active = false;
 	}
 	
 	public function create():Void
