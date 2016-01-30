@@ -12,6 +12,7 @@ import flixel.util.FlxMath;
 import flixel.util.FlxRandom;
 import orb.EnergyOrb;
 import orb.EnergyOrbTypeEnum;
+import orb.EnergySpawner;
 import orb.RecipeManager;
 import player.EnergyCollector;
 import player.EnerygyCollectorState.EnergyCollectorState;
@@ -32,7 +33,7 @@ class PlayState extends FlxState
 	var enemyBoss:Monster;
 	
 	public var playerHands:FlxSpriteGroup;
-	public var eneryOrbs:FlxSpriteGroup;
+	public var eneryOrbs:EnergySpawner;
 	public var playerEnergyCollectors:FlxSpriteGroup;
 	
 	/**
@@ -46,14 +47,11 @@ class PlayState extends FlxState
 		
 		playerEnergyCollectors = new FlxSpriteGroup();
 		add(playerEnergyCollectors);
-		eneryOrbs = new FlxSpriteGroup();
+		eneryOrbs = new EnergySpawner();
+		eneryOrbs.create(this);
 		add(eneryOrbs);
 		playerHands = new FlxSpriteGroup();
 		add(playerHands);
-		
-		var orb = new orb.EnergyOrb(this, 200, 50);
-		orb.create();
-		eneryOrbs.add(orb);
 		
 		playerLHand = new PlayerHand(this, 100, 100);
 		playerLHand.create();
@@ -70,14 +68,14 @@ class PlayState extends FlxState
 		
 		playerEnergyCollector = new EnergyCollector();
 		playerEnergyCollector.create();
-		playerEnergyCollector.screenCenter();
+		playerEnergyCollector.screenCenter(); playerEnergyCollector.y += 64; 
 		playerEnergyCollector.playerLHand = playerLHand;
 		playerEnergyCollector.playerRHand = playerRHand;
 		playerEnergyCollectors.add(playerEnergyCollector);
 		
 		enemyBoss = new Monster();
 		enemyBoss.create();
-		enemyBoss.screenCenter(); enemyBoss.y += 64; 
+		enemyBoss.screenCenter(); enemyBoss.y += 128; 
 		add(enemyBoss);
 	}
 	
@@ -96,14 +94,6 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
-		
-		if (FlxG.mouse.justPressed)
-		{
-			var newOrb = new EnergyOrb(this, FlxG.mouse.x, FlxG.mouse.y);
-			newOrb.create();
-			newOrb.orbtype = EnergyOrbTypeEnum.Blue;
-			eneryOrbs.add(newOrb);
-		}
 		
 		if (FlxG.keys.justPressed.T)
 		{

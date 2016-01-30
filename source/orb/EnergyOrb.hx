@@ -1,6 +1,7 @@
 package orb;
 
 import flixel.effects.FlxFlicker;
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
 import flixel.util.FlxMath;
@@ -10,6 +11,9 @@ import player.EnergyCollector;
 import player.EnerygyCollectorState.EnergyCollectorState;
 
 import flixel.util.FlxVelocity;
+
+
+using flixel.util.FlxSpriteUtil;
 
 /**
  * ...
@@ -68,7 +72,24 @@ class EnergyOrb extends FlxSprite
 	
 	public function create():Void
 	{
-		makeGraphic(48, 48, FlxColor.GRAY);
+		makeGraphic(32, 32);
+		elasticity = 1.0;
+	}
+	
+	public function resetStateData():Void
+	{
+		velocity.x = 0; velocity.y = 0;
+		color = FlxColor.GRAY;
+		
+		curr_state = EnergyOrbState.IDLE;
+		next_state = EnergyOrbState.IDLE;
+		orbtype = EnergyOrbTypeEnum.Undefined;
+		recorded_command = "";
+		curr_player_energy_collector = null;
+		
+		recording_state_timer.active = false;
+		collectable_state_timer.active = false;
+		retreat_state_timer.active = false;
 	}
 	
 	override public function update():Void 
@@ -87,6 +108,10 @@ class EnergyOrb extends FlxSprite
 				curr_player_energy_collector = playerEnergyCollector;
 			}
 		}
+		
+		if (x > FlxG.width + width) x = -width / 2;
+		if (x < -width) x = FlxG.width + width / 2;
+		if (y > FlxG.height) kill();
 				
 		switch(curr_state)
 		{

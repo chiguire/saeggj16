@@ -14,7 +14,6 @@ import orb.RecipeManager;
 class Monster extends FlxSpriteGroup
 {	
 	var tokens:List<EnergyOrbTypeEnum>;
-	var sprite_group:FlxSpriteGroup;
 	
 	public function new(X:Float=0, Y:Float=0, ?SimpleGraphic:Dynamic) 
 	{
