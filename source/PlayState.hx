@@ -8,6 +8,7 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.util.FlxMath;
+import orb.EnergyOrb;
 import player.PlayerHand;
 import player.PlayerHandMouse;
 
@@ -64,5 +65,12 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
+		
+		if (FlxG.mouse.justPressed)
+		{
+			var newOrb = new EnergyOrb(FlxG.mouse.x, FlxG.mouse.y);
+			newOrb.create();
+			eneryOrbs.add(newOrb);
+		}
 	}	
 }
