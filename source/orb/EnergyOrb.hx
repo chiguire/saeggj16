@@ -31,7 +31,7 @@ class EnergyOrb extends FlxSprite
 	// tweakables
 	public var recording_state_idle_time = 0.2;
 	public var collectable_state_time = 5.0;
-	public var draw_to_power_time = 2000; //millisecond
+	public var draw_to_power_time = 1000; //millisecond
 	public var retreat_speed = 512; // pixel/s
 	
 	public var orbtype = EnergyOrbTypeEnum.Undefined;
@@ -169,6 +169,13 @@ class EnergyOrb extends FlxSprite
 			if (transform_completed)
 			{
 				collectable_state_timer.reset();
+			}
+			else
+			{
+				if (!RecipeManager.can_transform_further(recorded_command) && orbtype==EnergyOrbTypeEnum.Undefined)
+				{
+					kill();
+				}
 			}
 		}
 	}

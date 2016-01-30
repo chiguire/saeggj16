@@ -17,15 +17,15 @@ using flixel.util.FlxSpriteUtil;
 class EnergySpawner extends FlxSpriteGroup
 {	
 	// tweakers
-	static var max_objects = 64;
-	public var spawn_time = 2.0;
+	static var max_objects = 10;
+	public var spawn_time = 5.0;
 	
 	var parentState:PlayState;
 	var spawnTimer:FlxTimer;
 	
-	public function new(X:Float=0, Y:Float=0, ?SimpleGraphic:Dynamic) 
+	public function new(X:Float=0, Y:Float=0) 
 	{
-		super(X, Y, SimpleGraphic);
+		super(X, Y, max_objects);
 	}
 	
 	public function create(playState:PlayState)
@@ -54,7 +54,7 @@ class EnergySpawner extends FlxSpriteGroup
 			add(newOrb);
 		}
 		
-		FlxG.collide(this);
+		//FlxG.collide(this);
 	}
 	
 	function on_spawn_timeup(t:FlxTimer):Void
@@ -64,15 +64,16 @@ class EnergySpawner extends FlxSpriteGroup
 	}
 	
 	function spawn()
-	{
-		var newOrb:EnergyOrb = cast recycle(EnergyOrb);
+	{	
+		var newOrb:EnergyOrb = cast getFirstDead();
 		if (newOrb != null)
 		{
+			newOrb.revive();
 			newOrb.resetStateData();
-			newOrb.x = FlxRandom.intRanged(0, FlxG.width);
-			newOrb.y = FlxRandom.intRanged(0, Std.int(FlxG.height/2));
-			newOrb.velocity.x = FlxRandom.intRanged(-64, 64);
-			newOrb.velocity.y = FlxRandom.intRanged(0, 0);
+			newOrb.angularVelocity = FlxRandom.intRanged( -2, 2);
+			
+			newOrb.x = FlxG.width/2 + FlxRandom.intRanged(-128, 128);
+			newOrb.y = FlxRandom.intRanged(0, Std.int(FlxG.height / 2));
 		}
 	}
 }
