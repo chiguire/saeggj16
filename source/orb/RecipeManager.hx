@@ -34,6 +34,7 @@ class RecipeManager
 		{
 			//trace(result.command);
 			o.update_properties(result.type);
+			return true;
 		}
 		
 		return false;
@@ -42,5 +43,10 @@ class RecipeManager
 	public static function get_definition(e:EnergyOrbTypeEnum):EnergyOrbDefinition
 	{
 		return energy_orb_definition_map.get(e);
+	}
+	
+	public static function can_transform_further(s:String):Bool
+	{
+		return (s.length < 2);
 	}
 }
