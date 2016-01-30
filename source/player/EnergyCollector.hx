@@ -26,7 +26,7 @@ class EnergyCollector extends FlxSprite
 	
 	public function create():Void
 	{
-		makeGraphic(64, 64, FlxColor.WHITE);
+		makeGraphic(64, 64, FlxColor.PINK);
 	}
 	
 	override public function update():Void 

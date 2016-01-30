@@ -3,6 +3,7 @@ package orb;
 import flixel.effects.FlxFlicker;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
+import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
 import flixel.util.FlxTimer;
 import player.EnergyCollector;
@@ -36,6 +37,7 @@ class EnergyOrb extends FlxSprite
 	
 	var recording_state_timer:FlxTimer;
 	var collectable_state_timer:FlxTimer;
+	var retreat_state_timer:FlxTimer;
 	
 	var parent_state:PlayState;
 	
@@ -55,6 +57,8 @@ class EnergyOrb extends FlxSprite
 		recording_state_timer.active = false;
 		collectable_state_timer = new FlxTimer(collectable_state_time, on_collectable_state_timeup);
 		collectable_state_timer.active = false;
+		retreat_state_timer = new FlxTimer(1.0, on_retreat_state_timeup);
+		retreat_state_timer.active = false;
 	}
 	
 	override public function destroy():Void 
@@ -107,10 +111,20 @@ class EnergyOrb extends FlxSprite
 			case EnergyOrbState.RETREAT:
 				{
 					FlxVelocity.moveTowardsPoint(this, curr_fallback_point, retreat_speed);
+					if (FlxMath.distanceToPoint(this, curr_fallback_point) < retreat_speed/10)
+					{
+						next_state = EnergyOrbState.IDLE;
+					}
 					
 					if (next_state == EnergyOrbState.DRAW_TO_POWER)
 					{
 						curr_state = EnergyOrbState.DRAW_TO_POWER;
+					}
+					else if (next_state == EnergyOrbState.IDLE)
+					{
+						curr_state = EnergyOrbState.IDLE;
+						velocity.x = 0; velocity.y = 0;
+						x = curr_fallback_point.x; y = curr_fallback_point.y;
 					}
 				}
 		}
@@ -143,6 +157,11 @@ class EnergyOrb extends FlxSprite
 	{
 		recorded_command = "";
 		update_properties(EnergyOrbTypeEnum.Undefined);
+	}
+	
+	function on_retreat_state_timeup(t:FlxTimer):Void
+	{
+		//next_state = EnergyOrbState.IDLE;
 	}
 	
 	public function update_properties(_orbType:EnergyOrbTypeEnum)

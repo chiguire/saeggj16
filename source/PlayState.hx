@@ -1,5 +1,6 @@
 package;
 
+import enemy.Monster;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -8,9 +9,12 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.util.FlxMath;
+import flixel.util.FlxRandom;
 import orb.EnergyOrb;
 import orb.EnergyOrbTypeEnum;
+import orb.RecipeManager;
 import player.EnergyCollector;
+import player.EnerygyCollectorState.EnergyCollectorState;
 import player.PlayerHand;
 import player.PlayerHandMouse;
 
@@ -25,6 +29,7 @@ class PlayState extends FlxState
 	var playerRHand:PlayerHand;
 	
 	var playerEnergyCollector:EnergyCollector;
+	var enemyBoss:Monster;
 	
 	public var playerHands:FlxSpriteGroup;
 	public var eneryOrbs:FlxSpriteGroup;
@@ -36,6 +41,8 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		super.create();
+		
+		RecipeManager.load_recipe();
 		
 		playerEnergyCollectors = new FlxSpriteGroup();
 		add(playerEnergyCollectors);
@@ -67,6 +74,11 @@ class PlayState extends FlxState
 		playerEnergyCollector.playerLHand = playerLHand;
 		playerEnergyCollector.playerRHand = playerRHand;
 		playerEnergyCollectors.add(playerEnergyCollector);
+		
+		enemyBoss = new Monster();
+		enemyBoss.create();
+		enemyBoss.screenCenter(); enemyBoss.y += 64; 
+		add(enemyBoss);
 	}
 	
 	/**
@@ -92,5 +104,26 @@ class PlayState extends FlxState
 			newOrb.orbtype = EnergyOrbTypeEnum.Blue;
 			eneryOrbs.add(newOrb);
 		}
-	}	
+		
+		if (FlxG.keys.justPressed.T)
+		{
+			var arry = Type.allEnums(EnergyOrbTypeEnum);
+			var def = FlxRandom.getObject(arry, 1, arry.length);
+			{
+				enemyBoss.add_token(def);
+			}
+		}
+		
+		FlxG.overlap(playerEnergyCollectors, eneryOrbs, on_energy_orb_collection_completed);
+	}
+	
+	function on_energy_orb_collection_completed(p:EnergyCollector, e:EnergyOrb):Void
+	{
+		if (p.state == EnergyCollectorState.ACTIVATED)
+		{
+			//trace("collection completed");
+			e.kill();
+			enemyBoss.remove_token(e.orbtype);
+		}
+	}
 }
