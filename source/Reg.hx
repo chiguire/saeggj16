@@ -2,6 +2,7 @@ package;
 
 import data.InputData;
 import flixel.util.FlxSave;
+import level.LevelDefinition;
 import level.LevelManager;
 import orb.RecipeManager;
 
@@ -22,6 +23,7 @@ class Reg
 	 * Example usage: Storing the current level number.
 	 */
 	public static var level:Int = 0;
+	public static var level_definition:LevelDefinition;
 	/**
 	 * Generic scores Array that can be used for cross-state stuff.
 	 * Example usage: Storing the scores for level.

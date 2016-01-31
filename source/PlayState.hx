@@ -64,7 +64,7 @@ class PlayState extends FlxState
 	{
 		super.create();
 		
-		level_definition = LevelManager.get_definition(Reg.level);
+		level_definition = Reg.level_definition;
 		
 		//FlxG.mouse.visible = false;
 		FlxG.autoPause = false;
@@ -103,7 +103,7 @@ class PlayState extends FlxState
 		
 		playerEnergyCollector = new EnergyCollector();
 		playerEnergyCollector.create();
-		playerEnergyCollector.screenCenter(); playerEnergyCollector.y += 64; 
+		playerEnergyCollector.screenCenter(); playerEnergyCollector.y += 32; 
 		playerEnergyCollector.playerLHand = playerLHand;
 		playerEnergyCollector.playerRHand = playerRHand;
 		playerEnergyCollectors.add(playerEnergyCollector);
@@ -213,6 +213,6 @@ class PlayState extends FlxState
 	function on_level_completed_timeup(t:FlxTimer):Void
 	{
 		Reg.level += 1;
-		FlxG.switchState(new PlayState());
+		FlxG.switchState(new PrePlayState());
 	}
 }
