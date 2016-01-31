@@ -18,7 +18,7 @@ class EnergySpawner extends FlxSpriteGroup
 {	
 	// tweakers
 	static var max_objects = 10;
-	public var spawn_time = 5.0;
+	public var spawn_time = 1.5;
 	
 	var parentState:PlayState;
 	var spawnTimer:FlxTimer;

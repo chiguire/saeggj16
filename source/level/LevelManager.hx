@@ -9,6 +9,7 @@ import orb.EnergyOrbTypeEnum;
 class LevelManager
 {
 	static var levels:Array<LevelDefinition> = new Array();
+	static var ending:LevelDefinition;
 	
 	static public function load_definition():Void
 	{
@@ -35,10 +36,18 @@ class LevelManager
 		Tokens:[EnergyOrbTypeEnum.Green, EnergyOrbTypeEnum.Blue, EnergyOrbTypeEnum.Red],
 		PreSpawnFactor:0,
 		LevelTimer:669.0 } );
+		
+		ending = { TitleText:"Last Chapter", 
+		SubTitleText:"End of the Ritual", 
+		Tokens:[],
+		PreSpawnFactor:0,
+		LevelTimer:669.0 }
 	}
 	
 	static public function get_definition(i:Int):LevelDefinition
 	{
+		if (i == 66) return ending;
+		
 		if (i >= 0 && i < levels.length) return levels[i];
 		else
 		{

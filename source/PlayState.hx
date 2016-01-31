@@ -255,6 +255,18 @@ class PlayState extends FlxState
 			}
 			FlxG.switchState(new PrePlayState());
 		}
+		if (FlxG.keys.justPressed.Y)
+		{
+		//	var arry = Type.allEnums(EnergyOrbTypeEnum);
+		//	var def = FlxRandom.getObject(arry, 1, arry.length);
+		//	{
+		//		enemyBoss.add_token(def);
+		//	}
+			{
+				Reg.level = 66;
+			}
+			FlxG.switchState(new PrePlayState());
+		}
 		
 		Reg.inputdata.value(MOUTH_HAPPINESS).value = mouth_happiness;
 		
@@ -340,7 +352,7 @@ class PlayState extends FlxState
 	{
 		level_completed = true;
 		
-		ritual_completed_text = new FlxText(0, FlxG.height/2, FlxG.width, "You Lose");
+		ritual_completed_text = new FlxText(0, FlxG.height/2, FlxG.width, "You Lose, Come on play again!");
 		ritual_completed_text.setFormat(null, 48, FlxColor.BLACK, "center");
 		ritual_completed_text.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
 		add(ritual_completed_text);
