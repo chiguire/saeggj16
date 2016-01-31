@@ -64,6 +64,13 @@ class PrePlayState extends FlxState
 	
 	function on_level_completed_timeup(t:FlxTimer):Void
 	{
-		FlxG.switchState(new PlayState());
+		if (Reg.level < 66)
+		{
+			FlxG.switchState(new PlayState());
+		}
+		else
+		{
+			FlxG.switchState(new EndingState());
+		}
 	}
 }
