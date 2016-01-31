@@ -47,6 +47,7 @@ class PlayState extends FlxState
 	public var playerEnergyCollectors:FlxSpriteGroup;
 	
 	public var mouth_happiness : Float;
+	public var update_mouth : Bool;
 	
 	var level_title_text:FlxText;
 	var ritual_completed_text:FlxText;
@@ -54,6 +55,8 @@ class PlayState extends FlxState
 	var level_definition:LevelDefinition;
 	var level_completed = false;
 	var level_completed_timer:FlxTimer;
+	
+	var command_layer : FlxTypedSpriteGroup<FlxText>;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -84,12 +87,14 @@ class PlayState extends FlxState
 		playerLHand = new PlayerHand(this, FlxG.width/2 - 150, 180);
 		playerLHand.create();
 		playerLHand.color = FlxColor.GOLDEN;
+		playerLHand.visible = false;
 		playerLHand.type = "L";
 		playerLHand.controlMapping("W", "A", "S", "D", "F");
 		playerRHand = new PlayerHand(this, FlxG.width/2 + 150, 180);
 		playerRHand.create();
 		playerRHand.controlMapping("I", "J", "K", "L", "H");
 		playerRHand.type = "R";
+		playerRHand.visible = false;
 		
 		player_body.left_hand = playerLHand;
 		player_body.right_hand = playerRHand;
@@ -121,6 +126,7 @@ class PlayState extends FlxState
 		enemyBoss.incorrect_orb_obtained.add(enemy_boss_incorrect_orb_obtained_handler);
 		
 		mouth_happiness = 0;
+		update_mouth = true;
 		
 		#if flash
 		//FlxG.sound.playMusic(FlxRandom.getObject([AssetPaths.Amityville__mp3, AssetPaths.Apparition__mp3]));
@@ -128,13 +134,15 @@ class PlayState extends FlxState
 		//FlxG.sound.playMusic(FlxRandom.getObject([AssetPaths.Amityville__ogg, AssetPaths.Apparition__ogg]));
 		#end
 		
+		command_layer = new FlxTypedSpriteGroup<FlxText>();
+		
 		level_title_text = new FlxText(0, 0, FlxG.width, "Level " + Std.string(Reg.level) + ":" + level_definition.TitleText);
 		add(level_title_text);
 		
 		level_completed_timer = new FlxTimer(3.0, on_level_completed_timeup);
 		level_completed_timer.active = false;
 		
-		ritual_completed_text = new FlxText(0, FlxG.height/2, FlxG.width, "Ritual Completed, You Win");
+		ritual_completed_text = new FlxText(0, FlxG.height/2, FlxG.width, "Ritual Completed");
 		ritual_completed_text.setFormat(null, 48, FlxColor.BLACK, "center");
 		ritual_completed_text.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
 		add(ritual_completed_text);
@@ -162,6 +170,7 @@ class PlayState extends FlxState
 		{
 			level_completed = true;
 			ritual_completed_text.visible = true;
+			update_mouth = false;
 			level_completed_timer.reset();
 		}
 		
@@ -178,7 +187,10 @@ class PlayState extends FlxState
 		
 		FlxG.overlap(playerEnergyCollectors, eneryOrbs, on_energy_orb_collection_completed);
 		
-		mouth_happiness *= 0.99;
+		if (update_mouth)
+		{
+			mouth_happiness *= 0.99;
+		}
 	}
 	
 	function on_energy_orb_collection_completed(p:EnergyCollector, e:EnergyOrb):Void

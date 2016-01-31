@@ -78,6 +78,18 @@ class Reg
 		inputdata.insert_value(ARM_LEFT1_ANGLE, 0, -360, 360);
 		inputdata.insert_value(ARM_RIGHT0_ANGLE, 0, -360, 360);
 		inputdata.insert_value(ARM_RIGHT1_ANGLE, 0, -360, 360);
+		
+		inputdata.insert_value(MONSTER_SKIN_HUE, 0, 0, 360);
+		inputdata.insert_value(MONSTER_SKIN_SATURATION, 0.5, 0.5, 1.0);
+		inputdata.insert_value(MONSTER_SKIN_VALUE, 0.5, 0.2, 0.8);
+		inputdata.insert_value(MONSTER_FACE_WIDTH, 25, 25, 70);
+		inputdata.insert_value(MONSTER_FACE_HEIGHT, 55, 35, 80);
+		inputdata.insert_value(MONSTER_NECK_LENGTH, 0.7, 0.5, 1.0);
+		inputdata.insert_value(MONSTER_TORSO_HEIGHT, 50, 40, 80);
+		inputdata.insert_value(MONSTER_CHEST_WIDTH, 40, 40, 80);
+		inputdata.insert_value(MONSTER_WAIST_WIDTH, 80, 60, 100);
+		inputdata.insert_value(MONSTER_HIP_WIDTH, 100, 80, 140);
+		inputdata.insert_value(MONSTER_LEGS_LENGTH, 80, 80, 120);
 		inputdata.fill_random();
 		
 		RecipeManager.load_recipe();
