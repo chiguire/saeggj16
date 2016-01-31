@@ -64,6 +64,11 @@ class PlayState extends FlxState
 	var level_timer:FlxTimer;
 	var level_timer_text:FlxText;
 	
+	var instructions_0 : FlxSprite;
+	var instructions_1 : FlxSprite;
+	var instructions_2 : FlxSprite;
+	var instructions_3 : FlxSprite;
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -75,6 +80,19 @@ class PlayState extends FlxState
 		
 		//FlxG.mouse.visible = false;
 		FlxG.autoPause = false;
+		
+		instructions_0 = new FlxSprite(0, FlxG.height - 200-112*2, AssetPaths.instructions_0__png);
+		instructions_0.visible = false;
+		add(instructions_0);
+		instructions_1 = new FlxSprite(0, FlxG.height - 200, AssetPaths.instructions_1__png);
+		instructions_1.visible = false;
+		add(instructions_1);
+		instructions_2 = new FlxSprite(0, FlxG.height - 200-112, AssetPaths.instructions_2__png);
+		instructions_2.visible = false;
+		add(instructions_2);
+		instructions_3 = new FlxSprite(FlxG.width - 210, 30, AssetPaths.instructions_3__png);
+		instructions_3.visible = false;
+		add(instructions_3);
 		
 		var background = new FlxStarField3D(0,0,0,0,100);
 		add(background);
@@ -152,7 +170,7 @@ class PlayState extends FlxState
 		command_layer = new FlxTypedSpriteGroup<FlxText>();
 		add(command_layer);
 		
-		level_title_text = new FlxText(0, 0, FlxG.width, "Level " + Std.string(Reg.level) + ":" + level_definition.TitleText);
+		level_title_text = new FlxText(0, 0, FlxG.width, "Level " + Std.string((Reg.level+1)) + ": " + level_definition.TitleText);
 		add(level_title_text);
 		
 		level_completed_timer = new FlxTimer(3.0, on_level_completed_timeup);
@@ -163,6 +181,35 @@ class PlayState extends FlxState
 		level_timer_text.setFormat(null, 16, FlxColor.BLACK, "center");
 		level_timer_text.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
 		add(level_timer_text);
+		
+		if (Reg.level < 3)
+		{
+			instructions_0.visible = true;
+			instructions_1.visible = true;
+			instructions_2.visible = true;
+			instructions_3.visible = true;
+		}
+		else if (Reg.level == 3)
+		{
+			var timer = new FlxTimer(25, function(t:FlxTimer)
+			{
+				level_title_text.text = level_title_text.text + " (Pssst... LL is Red, RR is Blue, and LR is Green)";
+				
+				instructions_0.visible = true;
+				instructions_0.alpha = 0;
+				instructions_1.visible = true;
+				instructions_1.alpha = 0;
+				instructions_2.visible = true;
+				instructions_2.alpha = 0;
+				instructions_3.visible = true;
+				instructions_3.alpha = 0;
+				
+				FlxTween.tween(instructions_0, { alpha: 1 }, 1);
+				FlxTween.tween(instructions_1, { alpha: 1 }, 1);
+				FlxTween.tween(instructions_2, { alpha: 1 }, 1);
+				FlxTween.tween(instructions_3, { alpha: 1 }, 1);
+			});
+		}
 	}
 	
 	/**
@@ -265,9 +312,12 @@ class PlayState extends FlxState
 	
 	public function commanded_orb_handler(x:Float, y:Float, command:String, orbtype:EnergyOrbTypeEnum) : Void
 	{
-		var txt = command_layer.recycle(FlxText, [x, y, 300, command, 50]);
+		var txt = cast(command_layer.recycle(FlxText, [x, y, 300, command, 50]), FlxText);
 		txt.revive();
 		txt.alpha = 1.0;
+		txt.text = command;
+		txt.x = x;
+		txt.y = y;
 		txt.color = switch (orbtype)
 		{
 			case EnergyOrbTypeEnum.Undefined:

@@ -29,13 +29,12 @@ class PrePlayState extends FlxState
 			titleText.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
 			add(titleText);
 		}
-		var levelTitleText;
+		
 		{
 			var titleText = new FlxText(0, FlxG.height/2 - 60, FlxG.width-30, level_definition.TitleText);
 			titleText.setFormat(null, 32, FlxColor.BLACK, "center");
 			titleText.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
 			add(titleText);
-			levelTitleText = titleText;
 		}
 		
 		{
