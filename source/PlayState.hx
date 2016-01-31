@@ -25,6 +25,7 @@ import player.PlayerBody;
 import player.PlayerHand;
 import player.PlayerHandControl;
 import player.PlayerHandMouse;
+import fx.SimpleFX;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -102,6 +103,13 @@ class PlayState extends FlxState
 		playerEnergyCollector.playerLHand = playerLHand;
 		playerEnergyCollector.playerRHand = playerRHand;
 		playerEnergyCollectors.add(playerEnergyCollector);
+		
+		var fx = new SimpleFX();
+		fx.x = FlxG.width / 2;
+		fx.y = FlxG.height / 2;
+		fx.initfx();
+		fx.startfx();
+		add(fx);
 		
 		enemyBoss = new Monster();
 		enemyBoss.tokens = Lambda.list(level_definition.Tokens);
