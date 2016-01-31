@@ -80,6 +80,7 @@ class PlayState extends FlxState
 		add(playerEnergyCollectors);
 		eneryOrbs = new EnergySpawner();
 		eneryOrbs.create(this);
+		eneryOrbs.pre_spawn(level_definition.PreSpawnFactor);
 		add(eneryOrbs);
 		playerHands = new FlxSpriteGroup();
 		add(playerHands);

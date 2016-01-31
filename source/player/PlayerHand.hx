@@ -19,7 +19,7 @@ class PlayerHand extends FlxSprite
 	// "L": left, "R": right
 	public var type = ""; 
 	
-	public var speed = 256.0;
+	public var speed = 512.0;
 	public var touch_idle_duration = 0.1;
 	
 	// key mapping

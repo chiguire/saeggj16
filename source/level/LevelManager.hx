@@ -15,22 +15,22 @@ class LevelManager
 		levels.push( { TitleText:"Left,Left is the RED Dance", 
 		SubTitleText:"", 
 		Tokens:[EnergyOrbTypeEnum.Red],
-		NumTokens:0 } );
+		PreSpawnFactor:0 } );
 		
 		levels.push( { TitleText:"Right,Right we called BLUE Dance", 
 		SubTitleText:"", 
 		Tokens:[EnergyOrbTypeEnum.Blue],
-		NumTokens:0 } );
+		PreSpawnFactor:0 } );
 		
 		levels.push( { TitleText:"Left,Right is the GREEN", 
 		SubTitleText:"", 
 		Tokens:[EnergyOrbTypeEnum.Green],
-		NumTokens:0 } );
+		PreSpawnFactor:0 } );
 		
-		levels.push( { TitleText:"Let see if you remember?", 
+		levels.push( { TitleText:"Let's see if you remember?", 
 		SubTitleText:"", 
 		Tokens:[EnergyOrbTypeEnum.Green, EnergyOrbTypeEnum.Blue, EnergyOrbTypeEnum.Red],
-		NumTokens:0 } );
+		PreSpawnFactor:0 } );
 	}
 	
 	static public function get_definition(i:Int):LevelDefinition
@@ -39,11 +39,12 @@ class LevelManager
 		else
 		{
 			var numTokens = FlxRandom.intRanged(4, 8);
+			var f = FlxRandom.floatRanged(0.3, 0.6);
 			var tokens = generate_random_tokens(numTokens);
 			return { TitleText:"Randomly Generated", 
 			SubTitleText:"", 
 			Tokens:tokens,
-			NumTokens:numTokens };
+			PreSpawnFactor:f };
 		}
 	}
 	

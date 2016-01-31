@@ -9,5 +9,5 @@ typedef LevelDefinition =
 	TitleText:String,
 	SubTitleText:String,
 	Tokens:Array<EnergyOrbTypeEnum>,
-	NumTokens:Int,
+	PreSpawnFactor:Float,
 }

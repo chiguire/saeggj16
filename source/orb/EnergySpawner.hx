@@ -47,12 +47,12 @@ class EnergySpawner extends FlxSpriteGroup
 	{
 		super.update();
 		
-		if(FlxG.mouse.justPressed)
-		{
-			var newOrb = new EnergyOrb(parentState, FlxG.mouse.x, FlxG.mouse.y);
-			newOrb.create();
-			add(newOrb);
-		}
+		//if(FlxG.mouse.justPressed)
+		//{
+		//	var newOrb = new EnergyOrb(parentState, FlxG.mouse.x, FlxG.mouse.y);
+		//	newOrb.create();
+		//	add(newOrb);
+		//}
 		
 		//FlxG.collide(this);
 	}
@@ -74,6 +74,15 @@ class EnergySpawner extends FlxSpriteGroup
 			
 			newOrb.x = FlxG.width/2 + FlxRandom.intRanged(-128, 128);
 			newOrb.y = FlxRandom.intRanged(0, Std.int(FlxG.height / 2));
+		}
+	}
+	
+	public function pre_spawn(n:Float)
+	{
+		var numSpawn:Int = Std.int(max_objects * n); 
+		for (i in 0...numSpawn)
+		{
+			spawn();
 		}
 	}
 }
