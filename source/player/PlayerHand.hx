@@ -7,6 +7,7 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.util.FlxPoint;
+import flixel.util.FlxVelocity;
 import orb.EnergyOrb;
 
 /**
@@ -80,8 +81,8 @@ class PlayerHand extends FlxSprite
 		mouse_delta_pos.y = FlxG.mouse.y - prev_cursor_pos.y;
 		switch(type)
 		{
-			case "L": controlLHand();
-			case "R": controlRHand();
+			case "L": controlLHandV2();//controlLHand();
+			case "R": controlRHandV2();//controlRHand();
 		}
 		prev_cursor_pos.x = FlxG.mouse.x;
 		prev_cursor_pos.y = FlxG.mouse.y;
@@ -107,6 +108,38 @@ class PlayerHand extends FlxSprite
 		{
 			velocity.x += gamepad.getXAxis(GamepadIDs.LEFT_ANALOGUE_X) * speed;
 			velocity.y += gamepad.getYAxis(GamepadIDs.LEFT_ANALOGUE_Y) * speed;
+		}
+	}
+	
+	function controlLHandV2():Void
+	{
+		if (FlxG.keys.pressed.A == true)
+		{
+			FlxVelocity.moveTowardsMouse(this, 256);
+			
+			if (FlxG.mouse.justPressed)
+			{
+				// collision checking
+				FlxG.overlap(this, parentState.eneryOrbs, notifyTouching);
+				// visual feedback
+				FlxFlicker.flicker(this, touch_idle_duration); 	
+			}
+		}
+	}
+	
+	function controlRHandV2():Void
+	{
+		if (FlxG.keys.pressed.S == true)
+		{
+			FlxVelocity.moveTowardsMouse(this, 256);
+			
+			if (FlxG.mouse.justPressed)
+			{
+				// collision checking
+				FlxG.overlap(this, parentState.eneryOrbs, notifyTouching);
+				// visual feedback
+				FlxFlicker.flicker(this, touch_idle_duration); 	
+			}
 		}
 	}
 	

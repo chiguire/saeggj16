@@ -11,6 +11,7 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.util.FlxMath;
 import flixel.util.FlxRandom;
+import flixel.util.FlxTimer;
 import orb.EnergyOrb;
 import orb.EnergyOrbTypeEnum;
 import orb.EnergySpawner;
@@ -43,6 +44,11 @@ class PlayState extends FlxState
 	
 	public var mouth_happiness : Float;
 	
+	var ritual_completed_text:FlxText;
+	
+	var level_completed = false;
+	var level_completed_timer:FlxTimer;
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -52,7 +58,7 @@ class PlayState extends FlxState
 		
 		RecipeManager.load_recipe();
 		
-		FlxG.mouse.visible = false;
+		//FlxG.mouse.visible = false;
 		FlxG.autoPause = false;
 		
 		var background = new FlxStarField3D(0,0,0,0,100);
@@ -107,6 +113,15 @@ class PlayState extends FlxState
 		#else
 		//FlxG.sound.playMusic(FlxRandom.getObject([AssetPaths.Amityville__ogg, AssetPaths.Apparition__ogg]));
 		#end
+		
+		level_completed_timer = new FlxTimer(3.0, on_level_completed_timeup);
+		level_completed_timer.active = false;
+		
+		ritual_completed_text = new FlxText(0, FlxG.height/2, FlxG.width, "Ritual Completed, You Win");
+		ritual_completed_text.setFormat(null, 48, FlxColor.BLACK, "center");
+		ritual_completed_text.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
+		add(ritual_completed_text);
+		ritual_completed_text.visible = false;
 	}
 	
 	/**
@@ -125,14 +140,22 @@ class PlayState extends FlxState
 	{
 		super.update();
 		
-		if (FlxG.keys.justPressed.T)
+		// end level condition
+		if (!level_completed && enemyBoss.tokens.isEmpty())
 		{
-			var arry = Type.allEnums(EnergyOrbTypeEnum);
-			var def = FlxRandom.getObject(arry, 1, arry.length);
-			{
-				enemyBoss.add_token(def);
-			}
+			level_completed = true;
+			ritual_completed_text.visible = true;
+			level_completed_timer.reset();
 		}
+		
+		//if (FlxG.keys.justPressed.T)
+		//{
+		//	var arry = Type.allEnums(EnergyOrbTypeEnum);
+		//	var def = FlxRandom.getObject(arry, 1, arry.length);
+		//	{
+		//		enemyBoss.add_token(def);
+		//	}
+		//}
 		
 		Reg.inputdata.value(MOUTH_HAPPINESS).value = mouth_happiness;
 		
@@ -166,4 +189,8 @@ class PlayState extends FlxState
 		mouth_happiness -= 0.2;
 	}
 	
+	function on_level_completed_timeup(t:FlxTimer):Void
+	{
+		FlxG.switchState(new PlayState());
+	}
 }

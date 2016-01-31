@@ -14,7 +14,7 @@ import orb.RecipeManager;
  */
 class Monster extends FlxSpriteGroup
 {	
-	var tokens:List<EnergyOrbTypeEnum>;
+	public var tokens:List<EnergyOrbTypeEnum>;
 	
 	public var killed : FlxSignal;
 	public var correct_orb_obtained : FlxSignal;
@@ -28,7 +28,7 @@ class Monster extends FlxSpriteGroup
 		correct_orb_obtained = new FlxSignal();
 		incorrect_orb_obtained = new FlxSignal();
 		
-		tokens = Lambda.list([EnergyOrbTypeEnum.Blue, EnergyOrbTypeEnum.Red, EnergyOrbTypeEnum.Blue, EnergyOrbTypeEnum.Green, EnergyOrbTypeEnum.Blue, EnergyOrbTypeEnum.Red]);
+		tokens = Lambda.list([EnergyOrbTypeEnum.Red]);
 	}
 	
 	public function create()
