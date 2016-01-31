@@ -99,7 +99,7 @@ class PlayerHand extends FlxSprite
 				// collision checking
 				FlxG.overlap(this, parentState.eneryOrbs, notifyTouching);
 				// visual feedback
-				FlxFlicker.flicker(this, touch_idle_duration); 	
+				//FlxFlicker.flicker(this, touch_idle_duration); 	
 			}
 		}
 		
@@ -122,7 +122,7 @@ class PlayerHand extends FlxSprite
 				// collision checking
 				FlxG.overlap(this, parentState.eneryOrbs, notifyTouching);
 				// visual feedback
-				FlxFlicker.flicker(this, touch_idle_duration); 	
+				//FlxFlicker.flicker(this, touch_idle_duration); 	
 			}
 		}
 	}
@@ -138,7 +138,7 @@ class PlayerHand extends FlxSprite
 				// collision checking
 				FlxG.overlap(this, parentState.eneryOrbs, notifyTouching);
 				// visual feedback
-				FlxFlicker.flicker(this, touch_idle_duration); 	
+				//FlxFlicker.flicker(this, touch_idle_duration); 	
 			}
 		}
 	}
@@ -154,7 +154,7 @@ class PlayerHand extends FlxSprite
 				// collision checking
 				FlxG.overlap(this, parentState.eneryOrbs, notifyTouching);
 				// visual feedback
-				FlxFlicker.flicker(this, touch_idle_duration); 	
+				//FlxFlicker.flicker(this, touch_idle_duration); 	
 			}
 		}
 		

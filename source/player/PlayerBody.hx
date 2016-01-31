@@ -27,6 +27,9 @@ class PlayerBody extends FlxSprite
 	public var body_x : Float;
 	public var body_y : Float;
 	
+	public var monster_x : Float;
+	public var monster_y : Float;
+	
 	public var left_hand : FlxSprite;
 	public var right_hand : FlxSprite;
 	
@@ -42,6 +45,9 @@ class PlayerBody extends FlxSprite
 		
 		body_x = FlxG.width / 2;
 		body_y = FlxG.height / 2;
+		
+		monster_x = FlxG.width / 2;
+		monster_y = 5*FlxG.height / 5;
 		
 		sprsrc = new Sprite();
 		g = sprsrc.graphics;
@@ -64,6 +70,9 @@ class PlayerBody extends FlxSprite
 		draw_body();
 		draw_face();
 		draw_arms();
+		
+		draw_monster();
+		
 		g.moveTo(0, 0);
 		bd.fillRect(new Rectangle(0, 0, FlxG.width, FlxG.height), 0);
 		bd.draw(sprsrc, m);
@@ -195,6 +204,9 @@ class PlayerBody extends FlxSprite
 		g.moveTo(body_x - face_width / 4, elh + face_height / 3 - mouth_happiness);
 		g.curveTo(body_x - face_width / 4, elh + face_height / 3, body_x, elh + face_height / 3);
 		g.curveTo(body_x + face_width / 4, elh + face_height / 3, body_x + face_width / 4, elh + face_height / 3 - mouth_happiness);
+		g.moveTo(0, 0);
+		g.lineStyle();
+		
 	}
 	
 	public function draw_arms()
@@ -375,5 +387,92 @@ class PlayerBody extends FlxSprite
 		}
 		
 		return false;
+	}
+	
+	public function draw_monster()
+	{
+		var skin_color = FlxColorUtil.makeFromHSBA(Reg.inputdata.v(MONSTER_SKIN_HUE), Reg.inputdata.v(MONSTER_SKIN_SATURATION), Reg.inputdata.v(MONSTER_SKIN_VALUE), 1.0);
+		var torso_height = Reg.inputdata.v(MONSTER_TORSO_HEIGHT);
+		var chest_width = Reg.inputdata.v(MONSTER_CHEST_WIDTH);
+		var waist_width = Reg.inputdata.v(MONSTER_WAIST_WIDTH);
+		var hip_width = Reg.inputdata.v(MONSTER_HIP_WIDTH);
+		var legs_length = Reg.inputdata.v(MONSTER_LEGS_LENGTH);
+		var legs_spreadness = Reg.inputdata.v(LEGS_SPREADNESS);
+		var face_width = Reg.inputdata.v(FACE_WIDTH);
+		var face_height = Reg.inputdata.v(FACE_HEIGHT);
+		var neck_length = Reg.inputdata.v(NECK_LENGTH) * face_height;
+		
+		g.beginFill(skin_color, 1);
+		g.moveTo(monster_x, monster_y - torso_height);
+		g.curveTo(monster_x + chest_width / 2.0, monster_y - torso_height, monster_x + chest_width / 2, monster_y - torso_height * 2.0 / 3.0);	// Chest
+		g.curveTo(monster_x + chest_width / 2.0, monster_y - torso_height / 3.0, monster_x + waist_width / 2, monster_y - torso_height / 3.0);	// Waist
+		g.curveTo(monster_x + hip_width / 2, monster_y - torso_height / 3.0, monster_x + hip_width / 2, monster_y);								// Hip
+		
+		
+		//Other side
+		g.lineTo(monster_x, monster_y + 30);
+		g.lineTo(monster_x - hip_width / 2, monster_y);																					// Hip
+		g.curveTo(monster_x - hip_width / 2, monster_y - torso_height / 3.0, monster_x - waist_width / 2, monster_y - torso_height / 3.0);		// Waist
+		g.curveTo(monster_x - chest_width / 2, monster_y - torso_height / 3.0, monster_x - chest_width / 2, monster_y - torso_height * 2.0 / 3.0); // Chest
+		g.curveTo(monster_x - chest_width / 2, monster_y - torso_height, monster_x, monster_y - torso_height);
+		g.endFill();
+		
+		// Left leg
+		g.beginFill(skin_color, 1);
+		g.moveTo(monster_x - hip_width / 2, monster_y);
+		
+		var sn = Math.sin(legs_spreadness * Math.PI / 8.0);
+		var sn1 = Math.sin((legs_spreadness - 18/180) * Math.PI / 8.0);
+		var cs = Math.cos(legs_spreadness * Math.PI / 8.0);
+		var cs1 = Math.cos((legs_spreadness - 18/180) * Math.PI / 8.0);
+		g.lineTo(monster_x - hip_width / 2 - sn * legs_length * 0.5, monster_y + cs * legs_length * 0.5);
+		g.lineTo(monster_x - hip_width / 2 - sn * legs_length * 0.5 - sn1 * legs_length * 0.5,
+				 monster_y + cs * legs_length * 0.5 + cs1 * legs_length * 0.5);
+			// Parallel line
+		g.lineTo(monster_x - hip_width / 2 - sn * legs_length * 0.5 - sn1 * legs_length * 0.5 + hip_width / 2.0 * 0.5,
+				 monster_y + cs * legs_length * 0.5 + cs1 * legs_length * 0.5);
+		g.lineTo(monster_x - hip_width / 2 - sn * legs_length * 0.5 + (hip_width / 2.0)* 0.4, monster_y + cs * legs_length * 0.5);
+		g.lineTo(monster_x, monster_y + 30);
+		g.endFill();
+		
+		// Right leg
+		g.beginFill(skin_color, 1);
+		g.moveTo(monster_x + hip_width / 2, monster_y);
+		
+		g.lineTo(monster_x + hip_width / 2 + sn * legs_length * 0.5, monster_y + cs * legs_length * 0.5);
+		g.lineTo(monster_x + hip_width / 2 + sn * legs_length * 0.5 + sn1 * legs_length * 0.5,
+				 monster_y + cs * legs_length * 0.5 + cs1 * legs_length * 0.5);
+			// Parallel line
+		g.lineTo(monster_x + hip_width / 2 + sn * legs_length * 0.5 + sn1 * legs_length * 0.5 - hip_width / 2.0 * 0.5,
+				 monster_y + cs * legs_length * 0.5 + cs1 * legs_length * 0.5);
+		g.lineTo(monster_x + hip_width / 2 + sn * legs_length * 0.5 - (hip_width / 2.0)* 0.4, monster_y + cs * legs_length * 0.5);
+		g.lineTo(monster_x, monster_y + 30);
+		g.endFill();
+		
+		var elh = monster_y - torso_height - neck_length;
+		
+		g.beginFill(skin_color, 1);
+		g.drawRect(monster_x - face_width * 0.15, elh, face_width * 0.3, neck_length*1.1);
+		g.endFill();
+		
+		g.beginFill(skin_color, 1);
+		g.moveTo(monster_x - face_width / 2, elh);
+		g.curveTo(monster_x - face_width / 2, elh - face_height / 3, monster_x, elh - face_height / 3);
+		g.curveTo(monster_x + face_width / 2, elh - face_height / 3, monster_x + face_width / 2, elh);
+		g.curveTo(monster_x + face_width / 2, elh + face_height * 2.0 / 3.0, monster_x, elh + face_height * 2.0 / 3.0);
+		g.curveTo(monster_x - face_width / 2, elh + face_height * 2.0 / 3.0, monster_x - face_width / 2, elh);
+		g.endFill();
+		
+		g.beginFill(skin_color, 1);
+		g.moveTo(monster_x - face_width / 2, elh);
+		g.curveTo(monster_x - face_width, elh, monster_x - face_width, elh - 40);
+		g.curveTo(monster_x - face_width, elh+30, monster_x - face_width / 3, elh + 30);
+		g.endFill();
+		
+		g.beginFill(skin_color, 1);
+		g.moveTo(monster_x + face_width / 2, elh);
+		g.curveTo(monster_x + face_width, elh, monster_x + face_width, elh - 40);
+		g.curveTo(monster_x + face_width, elh+30, monster_x + face_width / 3, elh + 30);
+		g.endFill();
 	}
 }
