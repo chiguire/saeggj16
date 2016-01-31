@@ -1,6 +1,7 @@
 package;
 
 import enemy.Monster;
+import flixel.addons.display.FlxStarField.FlxStarField3D;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -55,6 +56,9 @@ class PlayState extends FlxState
 		Mouse.lock = true;
 		FlxG.mouse.visible = false;
 		FlxG.autoPause = false;
+		
+		var background = new FlxStarField3D(0,0,0,0,100);
+		add(background);
 		
 		player_body = new PlayerBody();
 		add(player_body);
