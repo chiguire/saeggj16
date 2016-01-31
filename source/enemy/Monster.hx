@@ -53,7 +53,7 @@ class Monster extends FlxSpriteGroup
 		super.update();
 	}
 	
-	public function remove_token(e:EnergyOrbTypeEnum)
+	public function remove_token(e:EnergyOrbTypeEnum):Bool
 	{
 		if (tokens.remove(e))
 		{
@@ -83,11 +83,14 @@ class Monster extends FlxSpriteGroup
 				kill();
 				killed.dispatch();
 			}
+			
+			return true;
 		}
 		else
 		{
 			incorrect_orb_obtained.dispatch();
-		}
+		}		
+		return false;
 	}
 	
 	public function add_token(e:EnergyOrbTypeEnum)
