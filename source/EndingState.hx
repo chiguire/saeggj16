@@ -38,6 +38,7 @@ class EndingState extends FlxState
 		
 		player_body = new PlayerBody();
 		player_body.monster_y = 500;
+		player_body.monster_x = FlxG.width/2;
 		add(player_body);
 		
 		playerHands = new FlxSpriteGroup();
