@@ -185,14 +185,18 @@ class PlayState extends FlxState
 			level_completed_timer.reset();
 		}
 		
-		//if (FlxG.keys.justPressed.T)
-		//{
+		if (FlxG.keys.justPressed.T)
+		{
 		//	var arry = Type.allEnums(EnergyOrbTypeEnum);
 		//	var def = FlxRandom.getObject(arry, 1, arry.length);
 		//	{
 		//		enemyBoss.add_token(def);
 		//	}
-		//}
+			{
+				Reg.level += 1;
+			}
+			FlxG.switchState(new PrePlayState());
+		}
 		
 		Reg.inputdata.value(MOUTH_HAPPINESS).value = mouth_happiness;
 		
@@ -210,7 +214,17 @@ class PlayState extends FlxState
 		{
 			//trace("collection completed");
 			e.kill();
-			enemyBoss.remove_token(e.orbtype);
+
+			if (enemyBoss.remove_token(e.orbtype))
+			{
+				p.angularAcceleration += 10;
+				p.angularDrag = 1000;
+			}
+			else
+			{
+				p.angularAcceleration = 0;
+				p.angularVelocity = 0;
+			}
 		}
 	}
 	
