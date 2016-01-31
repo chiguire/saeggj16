@@ -39,15 +39,24 @@ class LevelManager
 		else
 		{
 			var numTokens = FlxRandom.intRanged(4, 8);
+			var tokens = generate_random_tokens(numTokens);
 			return { TitleText:"Randomly Generated", 
 			SubTitleText:"", 
-			Tokens:[],
+			Tokens:tokens,
 			NumTokens:numTokens };
 		}
 	}
 	
-	static public function generate_random_tokens(i:Int):Array<EnergyOrbTypeEnum>
+	static public function generate_random_tokens(numItems:Int):Array<EnergyOrbTypeEnum>
 	{
-		return null;
+		var arry = Type.allEnums(EnergyOrbTypeEnum);
+		var tokens = new Array<EnergyOrbTypeEnum>();
+		for (i in 0...numItems)
+		{
+			var def = FlxRandom.getObject(arry, 1, arry.length);
+			tokens.push(def);
+		}
+		
+		return tokens;
 	}
 }
