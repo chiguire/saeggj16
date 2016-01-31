@@ -4,6 +4,7 @@ import flash.display.Sprite;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxColor;
+import flixel.util.FlxSignal;
 import orb.EnergyOrbTypeEnum;
 import orb.RecipeManager;
 
@@ -15,9 +16,17 @@ class Monster extends FlxSpriteGroup
 {	
 	var tokens:List<EnergyOrbTypeEnum>;
 	
+	public var killed : FlxSignal;
+	public var correct_orb_obtained : FlxSignal;
+	public var incorrect_orb_obtained : FlxSignal;
+	
 	public function new(X:Float=0, Y:Float=0, ?SimpleGraphic:Dynamic) 
 	{
 		super(X, Y, SimpleGraphic);
+		
+		killed = new FlxSignal();
+		correct_orb_obtained = new FlxSignal();
+		incorrect_orb_obtained = new FlxSignal();
 		
 		tokens = Lambda.list([EnergyOrbTypeEnum.Blue, EnergyOrbTypeEnum.Red, EnergyOrbTypeEnum.Blue, EnergyOrbTypeEnum.Green, EnergyOrbTypeEnum.Blue, EnergyOrbTypeEnum.Red]);
 	}
@@ -54,6 +63,12 @@ class Monster extends FlxSpriteGroup
 			{
 				//trace("remove sprite");
 				itr.kill();
+				
+				correct_orb_obtained.dispatch();
+			}
+			else
+			{
+				incorrect_orb_obtained.dispatch();
 			}
 			
 			// rearrange the position
@@ -65,6 +80,12 @@ class Monster extends FlxSpriteGroup
 					obj.x = x + MonsterToken.token_size * counter;
 					counter++;
 				}
+			}
+			
+			if (tokens.length == 0)
+			{
+				kill();
+				killed.dispatch();
 			}
 		}
 	}

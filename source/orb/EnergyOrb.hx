@@ -37,6 +37,11 @@ class EnergyOrb extends FlxSprite
 	public var orbtype = EnergyOrbTypeEnum.Undefined;
 	public var recorded_command = "";
 	
+	public var sound_normal : String = "";
+	public var sound_action : String = "";
+	public var sound_reset: String = "";
+	public var sound_select : String = "";
+	
 	var can_record_command = true;
 	
 	var recording_state_timer:FlxTimer;
@@ -72,7 +77,7 @@ class EnergyOrb extends FlxSprite
 	
 	public function create():Void
 	{
-		makeGraphic(32, 32);
+		loadGraphic(AssetPaths.OrbNeutral04__png, false);
 		elasticity = 1.0;
 	}
 	
@@ -168,6 +173,11 @@ class EnergyOrb extends FlxSprite
 			var transform_completed = RecipeManager.transform(recorded_command, this);
 			if (transform_completed)
 			{
+				if (sound_normal != "")
+				{
+					var snd = FlxG.sound.play(sound_normal, 1);
+					snd.pan = ((x / FlxG.width) - 0.5) * 2;
+				}
 				collectable_state_timer.reset();
 			}
 			else
@@ -183,6 +193,12 @@ class EnergyOrb extends FlxSprite
 	function on_recording_state_idle_timeup(t:FlxTimer):Void
 	{
 		can_record_command = true;
+		
+		if (sound_reset != "")
+		{
+			var snd = FlxG.sound.play(sound_reset, 1);
+			snd.pan = ((x / FlxG.width) - 0.5) * 2;
+		}		
 	}
 	
 	function on_collectable_state_timeup(t:FlxTimer):Void
@@ -198,7 +214,13 @@ class EnergyOrb extends FlxSprite
 	
 	public function update_properties(_orbType:EnergyOrbTypeEnum)
 	{
+		var def = RecipeManager.energy_orb_definition_map[_orbType];
+		
 		orbtype = _orbType;
+		sound_action = def.sound_action;
+		sound_normal = def.sound_normal;
+		sound_reset = def.sound_reset;
+		sound_select = def.sound_select;
 		switch(orbtype)
 		{
 			case EnergyOrbTypeEnum.Undefined:
@@ -209,6 +231,12 @@ class EnergyOrb extends FlxSprite
 				color = FlxColor.GREEN;
 			case EnergyOrbTypeEnum.Blue:  
 				color = FlxColor.BLUE;
+		}
+		
+		if (sound_action != "")
+		{
+			var snd = FlxG.sound.play(sound_action, 1);
+			snd.pan = ((x / FlxG.width) - 0.5) * 2;
 		}
 	}
 }

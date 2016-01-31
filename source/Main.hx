@@ -7,6 +7,7 @@ import flash.events.Event;
 import flash.Lib;
 import flixel.FlxGame;
 import flixel.FlxState;
+import lime.ui.Mouse;
 
 class Main extends Sprite 
 {
@@ -62,9 +63,12 @@ class Main extends Sprite
 			gameWidth = Math.ceil(stageWidth / zoom);
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
+	
+		//trace("Mouse lock is " + Mouse.lock);
+		//Mouse.lock = true;
+		//Mouse.hide();
+		//trace("Mouse lock is " + Mouse.lock);
 		
-		
-
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen));
 	}
 }

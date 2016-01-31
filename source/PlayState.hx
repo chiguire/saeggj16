@@ -11,7 +11,6 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.util.FlxMath;
 import flixel.util.FlxRandom;
-import lime.ui.Mouse;
 import orb.EnergyOrb;
 import orb.EnergyOrbTypeEnum;
 import orb.EnergySpawner;
@@ -53,7 +52,6 @@ class PlayState extends FlxState
 		
 		RecipeManager.load_recipe();
 		
-		Mouse.lock = true;
 		FlxG.mouse.visible = false;
 		FlxG.autoPause = false;
 		
@@ -98,8 +96,17 @@ class PlayState extends FlxState
 		enemyBoss.create();
 		enemyBoss.screenCenter(); enemyBoss.y += 128; 
 		add(enemyBoss);
+		enemyBoss.killed.add(enemy_boss_killed_handler);
+		enemyBoss.correct_orb_obtained.add(enemy_boss_correct_orb_obtained_handler);
+		enemyBoss.incorrect_orb_obtained.add(enemy_boss_incorrect_orb_obtained_handler);
 		
 		mouth_happiness = 0;
+		
+		#if flash
+		//FlxG.sound.playMusic(FlxRandom.getObject([AssetPaths.Amityville__mp3, AssetPaths.Apparition__mp3]));
+		#else
+		//FlxG.sound.playMusic(FlxRandom.getObject([AssetPaths.Amityville__ogg, AssetPaths.Apparition__ogg]));
+		#end
 	}
 	
 	/**
@@ -136,13 +143,27 @@ class PlayState extends FlxState
 	
 	function on_energy_orb_collection_completed(p:EnergyCollector, e:EnergyOrb):Void
 	{
-		mouth_happiness += 0.2;
 		if (p.state == EnergyCollectorState.ACTIVATED)
 		{
 			//trace("collection completed");
 			e.kill();
 			enemyBoss.remove_token(e.orbtype);
-			mouth_happiness = 1.0;
 		}
 	}
+	
+	function enemy_boss_killed_handler()
+	{
+		mouth_happiness = 1.0;
+	}
+	
+	function enemy_boss_correct_orb_obtained_handler()
+	{
+		mouth_happiness += 0.2;
+	}
+	
+	function enemy_boss_incorrect_orb_obtained_handler()
+	{
+		mouth_happiness -= 0.2;
+	}
+	
 }
