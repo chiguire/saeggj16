@@ -1,37 +1,26 @@
-package;
+package player;
 
+import flixel.FlxSprite;
 import flash.display.BitmapData;
 import flash.display.Graphics;
 import flash.display.Sprite;
 import flash.geom.Matrix;
 import flash.geom.Rectangle;
-import flixel.addons.display.shapes.FlxShapeCircle;
 import flixel.FlxG;
-import flixel.FlxSprite;
-import flixel.FlxState;
-import flixel.group.FlxSpriteGroup;
-import flixel.group.FlxTypedGroup;
-import flixel.util.FlxColor;
 import flixel.util.FlxColorUtil;
-import flixel.util.FlxMath;
-import flixel.util.FlxPoint;
-import flixel.util.FlxSpriteUtil.LineStyle;
-import flixel.util.FlxSpriteUtil.FillStyle;
-import flixel.util.FlxTimer;
-import graphics.Arm;
+import flixel.util.FlxColor;
 
 /**
  * ...
  * @author Ciro Duran
  */
-class GraphicsTestState extends FlxState
+class PlayerBody extends FlxSprite
 {
 	public var a0 : Float;
 	public var a1 : Float;
 	
 	public var sprsrc : Sprite;
 	public var bd : BitmapData;
-	public var spr : FlxSprite;
 	public var g : Graphics;
 	public var m : Matrix;
 	
@@ -44,18 +33,11 @@ class GraphicsTestState extends FlxState
 	public var left_distance : Float;
 	public var right_distance : Float;
 	
-	/**
-	 * Function that is called up when to state is created to set it up. 
-	 */
-	override public function create():Void
+	public function new() 
 	{
-		super.create();
-		Reg.init();
+		super(0, 0);
 		
-		var timer = new FlxTimer(2, function (t:FlxTimer)
-		{
-			Reg.inputdata.fill_random();
-		}, 0);
+		Reg.init();
 		
 		a0 = 0;
 		a1 = 0;
@@ -67,36 +49,8 @@ class GraphicsTestState extends FlxState
 		g = sprsrc.graphics;
 		bd = new BitmapData(FlxG.width, FlxG.height, true, 0);
 		m = new Matrix(1, 0, 0, 1, 0, 0);
-		spr = new FlxSprite(0, 0);
-		add(spr);
-		
-		left_hand = new FlxSprite();
-		left_hand.makeGraphic(32, 32);
-		left_hand.centerOffsets();
-		left_hand.centerOrigin();
-		left_hand.x = FlxG.width / 2 - 100;
-		left_hand.y = FlxG.height / 3;
-		
-		right_hand = new FlxSprite();
-		right_hand.makeGraphic(32, 32);
-		right_hand.centerOffsets();
-		right_hand.centerOrigin();
-		right_hand.x = FlxG.width / 2 + 100;
-		right_hand.y = FlxG.height / 3;
-		
-		add(left_hand);
-		add(right_hand);
 	}
 	
-	/**
-	 * Function that is called when this state is destroyed - you might want to 
-	 * consider setting all objects this state uses to null to help garbage collection.
-	 */
-	override public function destroy():Void
-	{
-		super.destroy();
-	}
-
 	/**
 	 * Function that is called once every frame.
 	 */
@@ -115,44 +69,7 @@ class GraphicsTestState extends FlxState
 		
 		bd.fillRect(new Rectangle(0, 0, FlxG.width, FlxG.height), 0);
 		bd.draw(sprsrc, m);
-		spr.loadGraphic(bd);
-		
-		if (FlxG.keys.pressed.W && left_in_distance(0,-1))
-		{
-			left_hand.y -= 1;
-		}
-		else if (FlxG.keys.pressed.S && left_in_distance(0,1))
-		{
-			left_hand.y += 1;
-		}
-		
-		if (FlxG.keys.pressed.A && left_in_distance(-1, 0))
-		{
-			left_hand.x -= 1;
-		}
-		else if (FlxG.keys.pressed.D && left_in_distance(1, 0))
-		{
-			left_hand.x += 1;
-		}
-		
-		
-		if (FlxG.keys.pressed.I && right_in_distance(0, -1))
-		{
-			right_hand.y -= 1;
-		}
-		else if (FlxG.keys.pressed.K && right_in_distance(0, 1))
-		{
-			right_hand.y += 1;
-		}
-		
-		if (FlxG.keys.pressed.J && right_in_distance(-1, 0))
-		{
-			right_hand.x -= 1;
-		}
-		else if (FlxG.keys.pressed.L && right_in_distance(1, 0))
-		{
-			right_hand.x += 1;
-		}
+		loadGraphic(bd);
 		
 		var face_height = Reg.inputdata.v(FACE_HEIGHT);
 		var neck_length = Reg.inputdata.v(NECK_LENGTH) * face_height;
@@ -163,10 +80,8 @@ class GraphicsTestState extends FlxState
 		Reg.inputdata.value(PUPIL_DIRECTION_Y).value = (FlxG.mouse.y - elh) / FlxG.height * 2;
 		Reg.inputdata.value(EYE_CLOSENESS).value = (Math.sin(a0 * Math.PI / 45) * 5) - 4;
 		Reg.inputdata.value(LEGS_SPREADNESS).value = (Math.sin(a1 * Math.PI / 180) + 1) / 2.0;
-		
-		FlxG.watch.add(this, "left0_angle");
-		FlxG.watch.add(this, "left1_angle");
 	}
+	
 	
 	public function draw_body()
 	{

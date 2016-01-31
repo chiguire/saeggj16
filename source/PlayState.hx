@@ -16,6 +16,7 @@ import orb.EnergySpawner;
 import orb.RecipeManager;
 import player.EnergyCollector;
 import player.EnerygyCollectorState.EnergyCollectorState;
+import player.PlayerBody;
 import player.PlayerHand;
 import player.PlayerHandMouse;
 
@@ -26,6 +27,8 @@ using flixel.util.FlxSpriteUtil;
  */
 class PlayState extends FlxState
 {
+	var player_body : PlayerBody;
+	
 	var playerLHand:PlayerHand;
 	var playerRHand:PlayerHand;
 	
@@ -36,6 +39,8 @@ class PlayState extends FlxState
 	public var eneryOrbs:EnergySpawner;
 	public var playerEnergyCollectors:FlxSpriteGroup;
 	
+	public var mouth_happiness : Float;
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -45,6 +50,9 @@ class PlayState extends FlxState
 		
 		RecipeManager.load_recipe();
 		
+		player_body = new PlayerBody();
+		add(player_body);
+		
 		playerEnergyCollectors = new FlxSpriteGroup();
 		add(playerEnergyCollectors);
 		eneryOrbs = new EnergySpawner();
@@ -53,15 +61,18 @@ class PlayState extends FlxState
 		playerHands = new FlxSpriteGroup();
 		add(playerHands);
 		
-		playerLHand = new PlayerHand(this, 100, 100);
+		playerLHand = new PlayerHand(this, FlxG.width/2 - 150, 180);
 		playerLHand.create();
 		playerLHand.color = FlxColor.GOLDEN;
 		playerLHand.type = "L";
 		playerLHand.controlMapping("W", "A", "S", "D", "F");
-		playerRHand = new PlayerHand(this, 300, 100);
+		playerRHand = new PlayerHand(this, FlxG.width/2 + 150, 180);
 		playerRHand.create();
 		playerRHand.controlMapping("I", "J", "K", "L", "H");
 		playerRHand.type = "R";
+		
+		player_body.left_hand = playerLHand;
+		player_body.right_hand = playerRHand;
 		
 		playerHands.add(playerLHand);
 		playerHands.add(playerRHand);
@@ -77,6 +88,8 @@ class PlayState extends FlxState
 		enemyBoss.create();
 		enemyBoss.screenCenter(); enemyBoss.y += 128; 
 		add(enemyBoss);
+		
+		mouth_happiness = 0;
 	}
 	
 	/**
@@ -104,16 +117,22 @@ class PlayState extends FlxState
 			}
 		}
 		
+		Reg.inputdata.value(MOUTH_HAPPINESS).value = mouth_happiness;
+		
 		FlxG.overlap(playerEnergyCollectors, eneryOrbs, on_energy_orb_collection_completed);
+		
+		mouth_happiness *= 0.99;
 	}
 	
 	function on_energy_orb_collection_completed(p:EnergyCollector, e:EnergyOrb):Void
 	{
+		mouth_happiness += 0.2;
 		if (p.state == EnergyCollectorState.ACTIVATED)
 		{
 			//trace("collection completed");
 			e.kill();
 			enemyBoss.remove_token(e.orbtype);
+			mouth_happiness = 1.0;
 		}
 	}
 }
