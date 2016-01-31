@@ -2,6 +2,8 @@ package;
 
 import data.InputData;
 import flixel.util.FlxSave;
+import level.LevelManager;
+import orb.RecipeManager;
 
 /**
  * Handy, pre-built Registry class that can be used to store 
@@ -75,5 +77,8 @@ class Reg
 		inputdata.insert_value(ARM_RIGHT0_ANGLE, 0, -360, 360);
 		inputdata.insert_value(ARM_RIGHT1_ANGLE, 0, -360, 360);
 		inputdata.fill_random();
+		
+		RecipeManager.load_recipe();
+		LevelManager.load_definition();
 	};
 }

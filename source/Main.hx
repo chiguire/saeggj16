@@ -69,6 +69,7 @@ class Main extends Sprite
 		//Mouse.hide();
 		//trace("Mouse lock is " + Mouse.lock);
 		
+		Reg.init();
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen));
 	}
 }

@@ -37,8 +37,6 @@ class PlayerBody extends FlxSprite
 	{
 		super(0, 0);
 		
-		Reg.init();
-		
 		a0 = 0;
 		a1 = 0;
 		

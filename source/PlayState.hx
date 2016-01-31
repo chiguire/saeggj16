@@ -6,12 +6,15 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxSpriteGroup;
+import flixel.group.FlxTypedSpriteGroup;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.util.FlxMath;
 import flixel.util.FlxRandom;
 import flixel.util.FlxTimer;
+import level.LevelDefinition;
+import level.LevelManager;
 import orb.EnergyOrb;
 import orb.EnergyOrbTypeEnum;
 import orb.EnergySpawner;
@@ -44,8 +47,10 @@ class PlayState extends FlxState
 	
 	public var mouth_happiness : Float;
 	
+	var level_title_text:FlxText;
 	var ritual_completed_text:FlxText;
 	
+	var level_definition:LevelDefinition;
 	var level_completed = false;
 	var level_completed_timer:FlxTimer;
 	
@@ -56,7 +61,7 @@ class PlayState extends FlxState
 	{
 		super.create();
 		
-		RecipeManager.load_recipe();
+		level_definition = LevelManager.get_definition(Reg.level);
 		
 		//FlxG.mouse.visible = false;
 		FlxG.autoPause = false;
@@ -99,8 +104,9 @@ class PlayState extends FlxState
 		playerEnergyCollectors.add(playerEnergyCollector);
 		
 		enemyBoss = new Monster();
+		enemyBoss.tokens = Lambda.list(level_definition.Tokens);
 		enemyBoss.create();
-		enemyBoss.screenCenter(); enemyBoss.y += 128; 
+		enemyBoss.screenCenter(); enemyBoss.y += 128;	
 		add(enemyBoss);
 		enemyBoss.killed.add(enemy_boss_killed_handler);
 		enemyBoss.correct_orb_obtained.add(enemy_boss_correct_orb_obtained_handler);
@@ -113,6 +119,9 @@ class PlayState extends FlxState
 		#else
 		//FlxG.sound.playMusic(FlxRandom.getObject([AssetPaths.Amityville__ogg, AssetPaths.Apparition__ogg]));
 		#end
+		
+		level_title_text = new FlxText(0, 0, FlxG.width, "Level " + Std.string(Reg.level) + ":" + level_definition.TitleText);
+		add(level_title_text);
 		
 		level_completed_timer = new FlxTimer(3.0, on_level_completed_timeup);
 		level_completed_timer.active = false;
@@ -191,6 +200,7 @@ class PlayState extends FlxState
 	
 	function on_level_completed_timeup(t:FlxTimer):Void
 	{
+		Reg.level += 1;
 		FlxG.switchState(new PlayState());
 	}
 }
