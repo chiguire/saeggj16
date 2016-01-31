@@ -115,7 +115,7 @@ class PlayerHand extends FlxSprite
 	{
 		if (FlxG.keys.pressed.A == true)
 		{
-			FlxVelocity.moveTowardsMouse(this, 256);
+			FlxVelocity.moveTowardsMouse(this, speed);
 			
 			if (FlxG.mouse.justPressed)
 			{
@@ -131,7 +131,7 @@ class PlayerHand extends FlxSprite
 	{
 		if (FlxG.keys.pressed.S == true)
 		{
-			FlxVelocity.moveTowardsMouse(this, 256);
+			FlxVelocity.moveTowardsMouse(this, speed);
 			
 			if (FlxG.mouse.justPressed)
 			{
