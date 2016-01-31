@@ -3,6 +3,7 @@ package player;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
+import flixel.system.FlxSound;
 import flixel.util.FlxColor;
 import player.EnerygyCollectorState.EnergyCollectorState;
 
@@ -17,6 +18,8 @@ class EnergyCollector extends FlxSprite
 	// player hands overlapping test
 	public var playerLHand:PlayerHand;
 	public var playerRHand:PlayerHand;
+	
+	public var draw_sound : FlxSound;
 
 	public function new(X:Float=0, Y:Float=0, ?SimpleGraphic:Dynamic) 
 	{
@@ -38,10 +41,23 @@ class EnergyCollector extends FlxSprite
 		if (lhandOverlapping && rhandOverlapping)
 		{
 			//trace("drawing power");
+			if (draw_sound == null || !draw_sound.playing)
+			{
+				#if flash
+				draw_sound = FlxG.sound.play(AssetPaths.DrawOrbs__mp3, 0.5, true);
+				#else
+				draw_sound = FlxG.sound.play(AssetPaths.DrawOrbs__ogg, 0.5, true);
+				#end
+			}
+			
 			state = EnergyCollectorState.ACTIVATED;
 		}
 		else 
 		{
+			if (draw_sound != null)
+			{
+				draw_sound.stop();
+			}
 			state = EnergyCollectorState.IDLE;
 		}
 	}

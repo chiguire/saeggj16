@@ -36,6 +36,8 @@ class PrePlayState extends FlxState
 			titleText.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
 			add(titleText);
 		}
+		
+		Reg.inputdata.fill_random();
 	}
 	
 	/**

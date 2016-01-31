@@ -8,6 +8,7 @@ import flixel.FlxState;
 import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxTypedSpriteGroup;
 import flixel.text.FlxText;
+import flixel.tweens.FlxTween;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.util.FlxMath;
@@ -35,6 +36,7 @@ using flixel.util.FlxSpriteUtil;
 class PlayState extends FlxState
 {
 	var player_body : PlayerBody;
+	//var monster_body : MonsterBody;
 	
 	var playerLHand:PlayerHand;
 	var playerRHand:PlayerHand;
@@ -129,12 +131,21 @@ class PlayState extends FlxState
 		update_mouth = true;
 		
 		#if flash
-		//FlxG.sound.playMusic(FlxRandom.getObject([AssetPaths.Amityville__mp3, AssetPaths.Apparition__mp3]));
+		if (Reg.music != AssetPaths.InGame__mp3)
+		{
+			FlxG.sound.playMusic(AssetPaths.InGame__mp3);
+			Reg.music = AssetPaths.InGame__mp3;
+		}
 		#else
-		//FlxG.sound.playMusic(FlxRandom.getObject([AssetPaths.Amityville__ogg, AssetPaths.Apparition__ogg]));
+		if (Reg.music != AssetPaths.InGame__ogg)
+		{
+			FlxG.sound.playMusic(AssetPaths.InGame__ogg);
+			Reg.music = AssetPaths.InGame__ogg;
+		}
 		#end
 		
 		command_layer = new FlxTypedSpriteGroup<FlxText>();
+		add(command_layer);
 		
 		level_title_text = new FlxText(0, 0, FlxG.width, "Level " + Std.string(Reg.level) + ":" + level_definition.TitleText);
 		add(level_title_text);
@@ -222,5 +233,28 @@ class PlayState extends FlxState
 	{
 		Reg.level += 1;
 		FlxG.switchState(new PrePlayState());
+	}
+	
+	public function commanded_orb_handler(x:Float, y:Float, command:String, orbtype:EnergyOrbTypeEnum) : Void
+	{
+		var txt = command_layer.recycle(FlxText, [x, y, 300, command, 50]);
+		txt.revive();
+		txt.alpha = 1.0;
+		txt.color = switch (orbtype)
+		{
+			case EnergyOrbTypeEnum.Undefined:
+				FlxColor.GRAY;
+			case EnergyOrbTypeEnum.Red:  
+				FlxColor.RED;
+			case EnergyOrbTypeEnum.Green:
+				FlxColor.GREEN;
+			case EnergyOrbTypeEnum.Blue:  
+				FlxColor.BLUE;
+		};
+		FlxTween.tween(txt, { alpha: 0 }, 1);
+		FlxTween.linearMotion(txt, x, y, x, y - 100, 1, true, { complete: function(tw:FlxTween)
+		{
+			txt.kill();
+		} } );
 	}
 }

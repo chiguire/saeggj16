@@ -40,6 +40,8 @@ class Reg
 	 */
 	public static var saves:Array<FlxSave> = [];
 	
+	public static var music : String;
+	
 	public static var inputdata:InputData = null;
 	
 	public static var reg_inited : Bool = false;

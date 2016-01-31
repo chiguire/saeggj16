@@ -49,7 +49,23 @@ class MenuState extends FlxState
 		cursor_x = FlxG.width / 2.0 + 100;
 		cursor.y = rect1.y;
 		FlxTween.tween(cursor.scale, { x: -1 }, 1, { type: FlxTween.PINGPONG, ease: FlxEase.quadInOut } );
-		FlxTween.tween(this, { cursor_x: FlxG.width/2.0 - 100 }, 1, { type: FlxTween.PINGPONG, ease: FlxEase.quadInOut } );
+		FlxTween.tween(this, { cursor_x: FlxG.width / 2.0 - 100 }, 1, { type: FlxTween.PINGPONG, ease: FlxEase.quadInOut } );
+		
+		
+		#if flash
+		if (Reg.music != AssetPaths.TitleTrack__mp3)
+		{
+			FlxG.sound.playMusic(AssetPaths.TitleTrack__mp3);
+			Reg.music = AssetPaths.TitleTrack__mp3;
+		}
+		#else
+		if (Reg.music != AssetPaths.TitleTrack__ogg)
+		{
+			FlxG.sound.playMusic(AssetPaths.TitleTrack__ogg);
+			Reg.music = AssetPaths.TitleTrack__ogg;
+		}
+		#end
+		
 	}
 	
 	/**

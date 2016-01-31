@@ -1,5 +1,6 @@
 package player;
 
+import flash.geom.ColorTransform;
 import flixel.FlxSprite;
 import flash.display.BitmapData;
 import flash.display.Graphics;
@@ -9,6 +10,7 @@ import flash.geom.Rectangle;
 import flixel.FlxG;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxColor;
+import openfl.Assets;
 
 /**
  * ...
@@ -36,6 +38,11 @@ class PlayerBody extends FlxSprite
 	public var left_distance : Float;
 	public var right_distance : Float;
 	
+	public var left_hand_sprite : BitmapData;
+	public var right_hand_sprite : BitmapData;
+	public var left_hand_m : Matrix;
+	public var right_hand_m : Matrix;
+	
 	public function new() 
 	{
 		super(0, 0);
@@ -46,13 +53,18 @@ class PlayerBody extends FlxSprite
 		body_x = FlxG.width / 2;
 		body_y = FlxG.height / 2;
 		
-		monster_x = FlxG.width / 2;
+		monster_x = FlxG.width / 2+ 150;
 		monster_y = 5*FlxG.height / 5;
 		
 		sprsrc = new Sprite();
 		g = sprsrc.graphics;
 		bd = new BitmapData(FlxG.width, FlxG.height, true, 0);
 		m = new Matrix(1, 0, 0, 1, 0, 0);
+		
+		right_hand_sprite = Assets.getBitmapData(AssetPaths.right_hand__png);
+		right_hand_m = new Matrix();
+		left_hand_sprite = Assets.getBitmapData(AssetPaths.left_hand__png);
+		left_hand_m = new Matrix();
 	}
 	
 	/**
@@ -76,6 +88,7 @@ class PlayerBody extends FlxSprite
 		g.moveTo(0, 0);
 		bd.fillRect(new Rectangle(0, 0, FlxG.width, FlxG.height), 0);
 		bd.draw(sprsrc, m);
+		draw_hands();
 		loadGraphic(bd);
 		
 		var face_height = Reg.inputdata.v(FACE_HEIGHT);
@@ -239,7 +252,7 @@ class PlayerBody extends FlxSprite
 		var arm1_end_right_x = evaluate_right_arm_x(arm1_start_right_x, arm1_start_right_y, arm_length, arm_right0_angle+arm_right1_angle, 1.0);
 		var arm1_end_right_y = evaluate_right_arm_y(arm1_start_right_x, arm1_start_right_y, arm_length, arm_right0_angle+arm_right1_angle, 1.0);
 		
-		g.lineStyle(32, skin_color, 1.0);
+		g.lineStyle(20, skin_color, 1.0);
 		g.moveTo(body_x - chest_width / 2 + 16, body_y - torso_height + 16);
 		g.lineTo(arm1_start_left_x, arm1_start_left_y);
 		g.lineTo(arm1_end_left_x, arm1_end_left_y);
@@ -474,5 +487,49 @@ class PlayerBody extends FlxSprite
 		g.curveTo(monster_x + face_width, elh, monster_x + face_width, elh - 40);
 		g.curveTo(monster_x + face_width, elh+30, monster_x + face_width / 3, elh + 30);
 		g.endFill();
+	}
+	
+	public function draw_hands()
+	{
+		var skin_color = FlxColorUtil.makeFromHSBA(Reg.inputdata.v(SKIN_HUE), Reg.inputdata.v(SKIN_SATURATION), Reg.inputdata.v(SKIN_VALUE)*0.9, 1.0);
+		var skin_color_argb = FlxColorUtil.getARGB(skin_color);
+		var torso_height = Reg.inputdata.v(TORSO_HEIGHT);
+		var chest_width = Reg.inputdata.v(CHEST_WIDTH);
+		
+		var arm0_start_left_x = body_x - chest_width / 2 + 16;
+		var arm0_start_left_y = body_y - torso_height + 16;
+		var arm0_start_right_x = body_x + chest_width / 2 - 16;
+		var arm0_start_right_y = body_y - torso_height + 16;
+		var arm_length = 80;
+		
+		var arm_left0_angle = Reg.inputdata.v(ARM_LEFT0_ANGLE);
+		var arm_left1_angle = Reg.inputdata.v(ARM_LEFT1_ANGLE);
+		var arm_right0_angle = Reg.inputdata.v(ARM_RIGHT0_ANGLE);
+		var arm_right1_angle = Reg.inputdata.v(ARM_RIGHT1_ANGLE);
+		
+		var arm1_start_left_x = evaluate_left_arm_x(arm0_start_left_x, arm0_start_left_y, arm_length, arm_left0_angle, 1.0);
+		var arm1_start_left_y = evaluate_left_arm_y(arm0_start_left_x, arm0_start_left_y, arm_length, arm_left0_angle, 1.0);
+		var arm1_end_left_x = evaluate_left_arm_x(arm1_start_left_x, arm1_start_left_y, arm_length, arm_left0_angle+arm_left1_angle, 1.0);
+		var arm1_end_left_y = evaluate_left_arm_y(arm1_start_left_x, arm1_start_left_y, arm_length, arm_left0_angle+arm_left1_angle, 1.0);
+		
+		var arm1_start_right_x = evaluate_right_arm_x(arm0_start_right_x, arm0_start_right_y, arm_length, arm_right0_angle, 1.0);
+		var arm1_start_right_y = evaluate_right_arm_y(arm0_start_right_x, arm0_start_right_y, arm_length, arm_right0_angle, 1.0);	
+		var arm1_end_right_x = evaluate_right_arm_x(arm1_start_right_x, arm1_start_right_y, arm_length, arm_right0_angle+arm_right1_angle, 1.0);
+		var arm1_end_right_y = evaluate_right_arm_y(arm1_start_right_x, arm1_start_right_y, arm_length, arm_right0_angle+arm_right1_angle, 1.0);
+		
+		var ct :ColorTransform = new ColorTransform(skin_color_argb.red / 255.0, skin_color_argb.green / 255.0, skin_color_argb.blue / 255.0);
+		
+		left_hand_m.identity();
+		left_hand_m.translate(-10, -left_hand_sprite.height / 2.0);
+		left_hand_m.rotate((arm_left0_angle+arm_left1_angle) * Math.PI / 180);
+		left_hand_m.translate(arm1_end_left_x, arm1_end_left_y);
+		
+		right_hand_m.identity();
+		right_hand_m.translate(-10, -right_hand_sprite.height / 2.0);
+		right_hand_m.rotate((arm_right0_angle+arm_right1_angle) * Math.PI / 180);
+		right_hand_m.translate(arm1_end_right_x, arm1_end_right_y);
+		
+		bd.draw(left_hand_sprite, left_hand_m, ct);
+		bd.draw(right_hand_sprite, right_hand_m, ct);
 	}
 }
