@@ -66,7 +66,7 @@ class PlayerBody extends FlxSprite
 		draw_body();
 		draw_face();
 		draw_arms();
-		
+		g.moveTo(0, 0);
 		bd.fillRect(new Rectangle(0, 0, FlxG.width, FlxG.height), 0);
 		bd.draw(sprsrc, m);
 		loadGraphic(bd);
@@ -201,7 +201,7 @@ class PlayerBody extends FlxSprite
 	
 	public function draw_arms()
 	{
-		var skin_color = FlxColorUtil.makeFromHSBA(Reg.inputdata.v(SKIN_HUE), Reg.inputdata.v(SKIN_SATURATION), Reg.inputdata.v(SKIN_VALUE), 1.0);
+		var skin_color = FlxColorUtil.makeFromHSBA(Reg.inputdata.v(SKIN_HUE), Reg.inputdata.v(SKIN_SATURATION), Reg.inputdata.v(SKIN_VALUE)*0.9, 1.0);
 		var torso_height = Reg.inputdata.v(TORSO_HEIGHT);
 		var chest_width = Reg.inputdata.v(CHEST_WIDTH);
 		
@@ -237,6 +237,7 @@ class PlayerBody extends FlxSprite
 		g.moveTo(body_x + chest_width / 2 - 16, body_y - torso_height + 16);
 		g.lineTo(arm1_start_right_x, arm1_start_right_y);
 		g.lineTo(arm1_end_right_x, arm1_end_right_y);
+		g.moveTo(arm1_end_right_x, arm1_end_right_y);
 		g.lineStyle();
 	}
 	
