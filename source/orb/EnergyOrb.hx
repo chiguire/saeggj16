@@ -6,6 +6,7 @@ import flixel.FlxSprite;
 import flixel.util.FlxColor;
 import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
+import flixel.util.FlxSignal.FlxTypedSignal;
 import flixel.util.FlxTimer;
 import player.EnergyCollector;
 import player.EnerygyCollectorState.EnergyCollectorState;
@@ -56,9 +57,13 @@ class EnergyOrb extends FlxSprite
 	var curr_fallback_point = new FlxPoint();
 	var curr_player_energy_collector:EnergyCollector; 
 	
+	public var commanded : FlxTypedSignal<Float -> Float -> String -> EnergyOrbTypeEnum -> Void>;
+	
 	public function new(parentState:PlayState, X:Float=0, Y:Float=0, ?SimpleGraphic:Dynamic) 
 	{
 		super(X, Y, SimpleGraphic);
+		
+		commanded = new FlxTypedSignal<Float->Float->String->EnergyOrbTypeEnum->Void>();
 		
 		parent_state = parentState;
 		
@@ -171,6 +176,7 @@ class EnergyOrb extends FlxSprite
 			//trace(recorded_command);
 			
 			var transform_completed = RecipeManager.transform(recorded_command, this);
+			commanded.dispatch(x, y, recorded_command, orbtype);
 			if (transform_completed)
 			{
 				if (sound_normal != "")

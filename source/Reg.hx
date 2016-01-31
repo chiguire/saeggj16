@@ -40,6 +40,30 @@ class Reg
 	 */
 	public static var saves:Array<FlxSave> = [];
 	
+	public static var level_titles : Array<String> =
+		["You haven't seen your cousin for a month."
+		,"When you entered the room you forgot why you came and that's why you'll die here."
+		,"Look at what happened when you opened the door."
+		,"It might be Wednesday so you'll probably be doing this again."
+		,"Whilst inventing the dog bicycle Mr. Robinson came down with food poisoning."
+		,"Come feed sharks with me."
+		,"Ronald jumped at the chance to meet his neighbours."
+		,"On Saturday, Henry argued with a fish for 20 minutes because he thought it was still alive."
+		,"This kind of thing happens often."
+		,"Robert didn't like being spotted in a crowd."
+		,"Little did John know, he was being followed and graded on his ability to confuse grapes with olives."
+		,"After shoving the little boy into the river, Billy ran away."
+		,"Kitty loved to play the ice-chimes."
+		,"Claire was relieved to discover that you're never too old to pass on a sexually transmitted disease."
+		,"Kez made his way around town. Walking fast."
+		,"Rikki found an orb..."
+		,"Don't judge me."
+		,"Feed me durian fruit and call me Quantumby."
+		,"It's in the bottle."
+		,"You've got it."];
+	
+	public static var music : String;
+	
 	public static var inputdata:InputData = null;
 	
 	public static var reg_inited : Bool = false;

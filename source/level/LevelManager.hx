@@ -13,26 +13,26 @@ class LevelManager
 	
 	static public function load_definition():Void
 	{
-		levels.push( { TitleText:"Left,Left is the RED Dance", 
-		SubTitleText:"Complete the Ritual before the time run out!", 
+		levels.push( { TitleText:"Left, Left is the RED Dance", 
+		SubTitleText:"Complete the ritual before the time runs out!", 
 		Tokens:[EnergyOrbTypeEnum.Red],
 		PreSpawnFactor:0,
 		LevelTimer:669.0 } );
 		
-		levels.push( { TitleText:"Right,Right we called BLUE Dance", 
-		SubTitleText:"Complete the Ritual before the time run out!", 
+		levels.push( { TitleText:"Right, Right is called the BLUE Dance", 
+		SubTitleText:"Complete the ritual before the time runs out!", 
 		Tokens:[EnergyOrbTypeEnum.Blue],
 		PreSpawnFactor:0,
 		LevelTimer:669.0 } );
 		
-		levels.push( { TitleText:"Left,Right is the GREEN", 
-		SubTitleText:"Complete the Ritual before the time run out!", 
+		levels.push( { TitleText:"Left, Right is GREEN", 
+		SubTitleText:"Complete the ritual before the time runs out!", 
 		Tokens:[EnergyOrbTypeEnum.Green],
 		PreSpawnFactor:0,
 		LevelTimer:669.0 } );
 		
-		levels.push( { TitleText:"Let's see if you remember?", 
-		SubTitleText:"Complete the Ritual before the time run out!", 
+		levels.push( { TitleText:"Let's see if you remember", 
+		SubTitleText:"Complete the ritual before the time runs out!", 
 		Tokens:[EnergyOrbTypeEnum.Green, EnergyOrbTypeEnum.Blue, EnergyOrbTypeEnum.Red],
 		PreSpawnFactor:0,
 		LevelTimer:669.0 } );
@@ -54,8 +54,8 @@ class LevelManager
 			var numTokens = FlxRandom.intRanged(4, 16);
 			var f = FlxRandom.floatRanged(0.3, 0.6);
 			var tokens = generate_random_tokens(numTokens);
-			return { TitleText:"Randomly Generated", 
-			SubTitleText:"Complete the Ritual before the time run out!", 
+			return { TitleText:Reg.level_titles[(i-levels.length)%Reg.level_titles.length], 
+			SubTitleText:"Complete the ritual before the time runs out!", 
 			Tokens:tokens,
 			PreSpawnFactor:f,
 			LevelTimer:(numTokens * 10.0),

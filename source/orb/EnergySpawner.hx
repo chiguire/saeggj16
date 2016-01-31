@@ -36,6 +36,7 @@ class EnergySpawner extends FlxSpriteGroup
 		{
 			var orb = new orb.EnergyOrb(parentState);
 			orb.create();
+			orb.commanded.add(parentState.commanded_orb_handler);
 			add(orb);
 			orb.kill();
 		}

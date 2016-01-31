@@ -63,13 +63,9 @@ class Monster extends FlxSpriteGroup
 			{
 				//trace("remove sprite");
 				itr.kill();
-				
-				correct_orb_obtained.dispatch();
 			}
-			else
-			{
-				incorrect_orb_obtained.dispatch();
-			}
+			
+			correct_orb_obtained.dispatch();
 			
 			// rearrange the position
 			var counter = 0;
@@ -90,7 +86,10 @@ class Monster extends FlxSpriteGroup
 			
 			return true;
 		}
-		
+		else
+		{
+			incorrect_orb_obtained.dispatch();
+		}		
 		return false;
 	}
 	

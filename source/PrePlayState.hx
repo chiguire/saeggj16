@@ -24,25 +24,28 @@ class PrePlayState extends FlxState
 		var level_completed_timer = new FlxTimer(3.0, on_level_completed_timeup);
 		
 		{
-			var titleText = new FlxText(0, FlxG.height/2 - 120, FlxG.width, "Level " + Reg.level);
+			var titleText = new FlxText(0, FlxG.height/2 - 120, FlxG.width, "Level " + (Reg.level+1));
 			titleText.setFormat(null, 48, FlxColor.BLACK, "center");
 			titleText.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
 			add(titleText);
 		}
-		
+		var levelTitleText;
 		{
-			var titleText = new FlxText(0, FlxG.height/2 - 60, FlxG.width, level_definition.TitleText);
+			var titleText = new FlxText(0, FlxG.height/2 - 60, FlxG.width-30, level_definition.TitleText);
 			titleText.setFormat(null, 32, FlxColor.BLACK, "center");
 			titleText.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
 			add(titleText);
+			levelTitleText = titleText;
 		}
 		
 		{
-			var titleText = new FlxText(0, FlxG.height/2 + 30, FlxG.width, level_definition.SubTitleText);
+			var titleText = new FlxText(0, FlxG.height - 100, FlxG.width, level_definition.SubTitleText);
 			titleText.setFormat(null, 16, FlxColor.BLACK, "center");
 			titleText.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
 			add(titleText);
 		}
+
+		Reg.inputdata.fill_random();
 	}
 	
 	/**
