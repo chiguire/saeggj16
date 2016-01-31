@@ -13,24 +13,28 @@ class LevelManager
 	static public function load_definition():Void
 	{
 		levels.push( { TitleText:"Left,Left is the RED Dance", 
-		SubTitleText:"", 
+		SubTitleText:"Complete the Ritual before the time run out!", 
 		Tokens:[EnergyOrbTypeEnum.Red],
-		PreSpawnFactor:0 } );
+		PreSpawnFactor:0,
+		LevelTimer:669.0 } );
 		
 		levels.push( { TitleText:"Right,Right we called BLUE Dance", 
-		SubTitleText:"", 
+		SubTitleText:"Complete the Ritual before the time run out!", 
 		Tokens:[EnergyOrbTypeEnum.Blue],
-		PreSpawnFactor:0 } );
+		PreSpawnFactor:0,
+		LevelTimer:669.0 } );
 		
 		levels.push( { TitleText:"Left,Right is the GREEN", 
-		SubTitleText:"", 
+		SubTitleText:"Complete the Ritual before the time run out!", 
 		Tokens:[EnergyOrbTypeEnum.Green],
-		PreSpawnFactor:0 } );
+		PreSpawnFactor:0,
+		LevelTimer:669.0 } );
 		
 		levels.push( { TitleText:"Let's see if you remember?", 
-		SubTitleText:"", 
+		SubTitleText:"Complete the Ritual before the time run out!", 
 		Tokens:[EnergyOrbTypeEnum.Green, EnergyOrbTypeEnum.Blue, EnergyOrbTypeEnum.Red],
-		PreSpawnFactor:0 } );
+		PreSpawnFactor:0,
+		LevelTimer:669.0 } );
 	}
 	
 	static public function get_definition(i:Int):LevelDefinition
@@ -38,13 +42,15 @@ class LevelManager
 		if (i >= 0 && i < levels.length) return levels[i];
 		else
 		{
-			var numTokens = FlxRandom.intRanged(4, 8);
+			var numTokens = FlxRandom.intRanged(4, 16);
 			var f = FlxRandom.floatRanged(0.3, 0.6);
 			var tokens = generate_random_tokens(numTokens);
 			return { TitleText:"Randomly Generated", 
-			SubTitleText:"", 
+			SubTitleText:"Complete the Ritual before the time run out!", 
 			Tokens:tokens,
-			PreSpawnFactor:f };
+			PreSpawnFactor:f,
+			LevelTimer:(numTokens * 10.0),
+			};
 		}
 	}
 	

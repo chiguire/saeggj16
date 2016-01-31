@@ -10,4 +10,5 @@ typedef LevelDefinition =
 	SubTitleText:String,
 	Tokens:Array<EnergyOrbTypeEnum>,
 	PreSpawnFactor:Float,
+	LevelTimer:Float,
 }

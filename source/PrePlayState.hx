@@ -36,6 +36,13 @@ class PrePlayState extends FlxState
 			titleText.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
 			add(titleText);
 		}
+		
+		{
+			var titleText = new FlxText(0, FlxG.height/2 + 30, FlxG.width, level_definition.SubTitleText);
+			titleText.setFormat(null, 16, FlxColor.BLACK, "center");
+			titleText.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
+			add(titleText);
+		}
 	}
 	
 	/**

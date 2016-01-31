@@ -58,6 +58,10 @@ class PlayState extends FlxState
 	
 	var command_layer : FlxTypedSpriteGroup<FlxText>;
 	
+	// level timer
+	var level_timer:FlxTimer;
+	var level_timer_text:FlxText;
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -143,11 +147,11 @@ class PlayState extends FlxState
 		level_completed_timer = new FlxTimer(3.0, on_level_completed_timeup);
 		level_completed_timer.active = false;
 		
-		ritual_completed_text = new FlxText(0, FlxG.height/2, FlxG.width, "Ritual Completed");
-		ritual_completed_text.setFormat(null, 48, FlxColor.BLACK, "center");
-		ritual_completed_text.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
-		add(ritual_completed_text);
-		ritual_completed_text.visible = false;
+		level_timer = new FlxTimer(level_definition.LevelTimer, on_level_timer_completed);
+		level_timer_text = new FlxText(0, enemyBoss.y + 48, FlxG.width, "0.0");
+		level_timer_text.setFormat(null, 16, FlxColor.BLACK, "center");
+		level_timer_text.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
+		add(level_timer_text);
 	}
 	
 	/**
@@ -166,11 +170,17 @@ class PlayState extends FlxState
 	{
 		super.update();
 		
+		level_timer_text.text = Std.string(Math.fround(level_timer.timeLeft));
+		
 		// end level condition
 		if (!level_completed && enemyBoss.tokens.isEmpty())
 		{
 			level_completed = true;
-			ritual_completed_text.visible = true;
+			ritual_completed_text = new FlxText(0, FlxG.height/2, FlxG.width, "Ritual Completed");
+			ritual_completed_text.setFormat(null, 48, FlxColor.BLACK, "center");
+			ritual_completed_text.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
+			add(ritual_completed_text);
+			
 			update_mouth = false;
 			level_completed_timer.reset();
 		}
@@ -221,7 +231,23 @@ class PlayState extends FlxState
 	
 	function on_level_completed_timeup(t:FlxTimer):Void
 	{
-		Reg.level += 1;
+		if (enemyBoss.tokens.isEmpty()) 
+		{
+			Reg.level += 1;
+		}
 		FlxG.switchState(new PrePlayState());
+	}
+	
+	function on_level_timer_completed(t:FlxTimer):Void
+	{
+		level_completed = true;
+		
+		ritual_completed_text = new FlxText(0, FlxG.height/2, FlxG.width, "You Lose");
+		ritual_completed_text.setFormat(null, 48, FlxColor.BLACK, "center");
+		ritual_completed_text.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
+		add(ritual_completed_text);
+		
+		update_mouth = false;
+		level_completed_timer.reset();
 	}
 }
