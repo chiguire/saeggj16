@@ -17,6 +17,7 @@ import orb.RecipeManager;
 import player.EnergyCollector;
 import player.EnerygyCollectorState.EnergyCollectorState;
 import player.PlayerHand;
+import player.PlayerHandControl;
 import player.PlayerHandMouse;
 
 using flixel.util.FlxSpriteUtil;
