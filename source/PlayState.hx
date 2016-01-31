@@ -10,6 +10,7 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.util.FlxMath;
 import flixel.util.FlxRandom;
+import lime.ui.Mouse;
 import orb.EnergyOrb;
 import orb.EnergyOrbTypeEnum;
 import orb.EnergySpawner;
@@ -50,6 +51,10 @@ class PlayState extends FlxState
 		super.create();
 		
 		RecipeManager.load_recipe();
+		
+		Mouse.lock = true;
+		FlxG.mouse.visible = false;
+		FlxG.autoPause = false;
 		
 		player_body = new PlayerBody();
 		add(player_body);

@@ -5,6 +5,7 @@ import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.input.gamepad.FlxGamepad;
 import flixel.util.FlxPoint;
 import orb.EnergyOrb;
 
@@ -32,6 +33,8 @@ class PlayerHand extends FlxSprite
 	var prev_cursor_pos = new FlxPoint();
 	var mouse_delta_pos = new FlxPoint();
 	
+	var gamepad:FlxGamepad;
+	
 	public function new(_parentState:PlayState, X:Float=0, Y:Float=0, ?SimpleGraphic:Dynamic) 
 	{
 		super(X, Y, SimpleGraphic);
@@ -57,7 +60,7 @@ class PlayerHand extends FlxSprite
 	{
 		super.update();
 		
-		//velocity.x = velocity.y = 0;
+		velocity.x = velocity.y = 0;
 		//if ( FlxG.keys.anyPressed([key_up])) { velocity.y -= speed; }
 		//if ( FlxG.keys.anyPressed([key_left])) { velocity.x -= speed; } 
 		//if ( FlxG.keys.anyPressed([key_down])) { velocity.y += speed; } 
@@ -70,6 +73,8 @@ class PlayerHand extends FlxSprite
 			// visual feedback
 			//FlxFlicker.flicker(this, touch_idle_duration); 	
 		//}
+		
+		gamepad = FlxG.gamepads.lastActive;
 		
 		mouse_delta_pos.x = FlxG.mouse.x - prev_cursor_pos.x;
 		mouse_delta_pos.y = FlxG.mouse.y - prev_cursor_pos.y;
@@ -87,6 +92,21 @@ class PlayerHand extends FlxSprite
 		if (FlxG.keys.pressed.SPACE == false)
 		{
 			x += mouse_delta_pos.x; y += mouse_delta_pos.y;
+			
+			if (FlxG.mouse.justPressed)
+			{
+				// collision checking
+				FlxG.overlap(this, parentState.eneryOrbs, notifyTouching);
+				// visual feedback
+				FlxFlicker.flicker(this, touch_idle_duration); 	
+			}
+		}
+		
+		// game pad
+		if (gamepad != null)
+		{
+			velocity.x += gamepad.getXAxis(GamepadIDs.LEFT_ANALOGUE_X) * speed;
+			velocity.y += gamepad.getYAxis(GamepadIDs.LEFT_ANALOGUE_Y) * speed;
 		}
 	}
 	
@@ -95,6 +115,21 @@ class PlayerHand extends FlxSprite
 		if (FlxG.keys.pressed.SPACE == true)
 		{
 			x += mouse_delta_pos.x; y += mouse_delta_pos.y;
+			
+			if (FlxG.mouse.justPressed)
+			{
+				// collision checking
+				FlxG.overlap(this, parentState.eneryOrbs, notifyTouching);
+				// visual feedback
+				FlxFlicker.flicker(this, touch_idle_duration); 	
+			}
+		}
+		
+		// game pad
+		if (gamepad != null)
+		{
+			velocity.x += gamepad.getXAxis(GamepadIDs.RIGHT_ANALOGUE_X) * speed;
+			velocity.y += gamepad.getYAxis(GamepadIDs.RIGHT_ANALOGUE_Y) * speed;
 		}
 	}
 	
