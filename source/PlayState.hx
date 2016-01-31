@@ -81,6 +81,9 @@ class PlayState extends FlxState
 		//FlxG.mouse.visible = false;
 		FlxG.autoPause = false;
 		
+		var background = new FlxStarField3D(0,0,0,0,100);
+		add(background);
+		
 		instructions_0 = new FlxSprite(0, FlxG.height - 200-112*2, AssetPaths.instructions_0__png);
 		instructions_0.visible = false;
 		add(instructions_0);
@@ -90,12 +93,9 @@ class PlayState extends FlxState
 		instructions_2 = new FlxSprite(0, FlxG.height - 200-112, AssetPaths.instructions_2__png);
 		instructions_2.visible = false;
 		add(instructions_2);
-		instructions_3 = new FlxSprite(FlxG.width - 210, 30, AssetPaths.instructions_3__png);
+		instructions_3 = new FlxSprite(FlxG.width - 290, 30, AssetPaths.instructions_3__png);
 		instructions_3.visible = false;
 		add(instructions_3);
-		
-		var background = new FlxStarField3D(0,0,0,0,100);
-		add(background);
 		
 		player_body = new PlayerBody();
 		add(player_body);
