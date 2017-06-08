@@ -6,13 +6,12 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxSpriteGroup;
-import flixel.group.FlxTypedSpriteGroup;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
-import flixel.util.FlxMath;
-import flixel.util.FlxRandom;
+import flixel.math.FlxMath;
+import flixel.math.FlxRandom;
 import flixel.util.FlxTimer;
 import level.LevelDefinition;
 import level.LevelManager;
@@ -111,7 +110,7 @@ class PlayState extends FlxState
 		
 		playerLHand = new PlayerHand(this, FlxG.width/2 - 150, 180);
 		playerLHand.create();
-		playerLHand.color = FlxColor.GOLDEN;
+		playerLHand.color = 0xffffd700; // FlxColor.GOLDEN;
 		playerLHand.visible = false;
 		playerLHand.type = "L";
 		playerLHand.controlMapping("W", "A", "S", "D", "F");
@@ -173,13 +172,15 @@ class PlayState extends FlxState
 		level_title_text = new FlxText(0, 0, FlxG.width, "Level " + Std.string((Reg.level+1)) + ": " + level_definition.TitleText);
 		add(level_title_text);
 		
-		level_completed_timer = new FlxTimer(3.0, on_level_completed_timeup);
+		level_completed_timer = new FlxTimer();
+		level_completed_timer.start(3.0, on_level_completed_timeup);
 		level_completed_timer.active = false;
 		
-		level_timer = new FlxTimer(level_definition.LevelTimer, on_level_timer_completed);
+		level_timer = new FlxTimer();
+		level_timer.start(level_definition.LevelTimer, on_level_timer_completed);
 		level_timer_text = new FlxText(0, enemyBoss.y + 48, FlxG.width, "0.0");
 		level_timer_text.setFormat(null, 16, FlxColor.BLACK, "center");
-		level_timer_text.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
+		level_timer_text.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.WHITE, 2);
 		add(level_timer_text);
 		
 		if (Reg.level < 3)
@@ -191,7 +192,8 @@ class PlayState extends FlxState
 		}
 		else if (Reg.level == 3)
 		{
-			var timer = new FlxTimer(25, function(t:FlxTimer)
+			var timer = new FlxTimer();
+			timer.start(25, function(t:FlxTimer)
 			{
 				level_title_text.text = level_title_text.text + " (Pssst... LL is Red, RR is Blue, and LR is Green)";
 				
@@ -224,9 +226,9 @@ class PlayState extends FlxState
 	/**
 	 * Function that is called once every frame.
 	 */
-	override public function update():Void
+	override public function update(elapsed:Float):Void
 	{
-		super.update();
+		super.update(elapsed);
 		
 		level_timer_text.text = Std.string(Math.fround(level_timer.timeLeft));
 		
@@ -236,7 +238,7 @@ class PlayState extends FlxState
 			level_completed = true;
 			ritual_completed_text = new FlxText(0, FlxG.height/2, FlxG.width, "Ritual Completed");
 			ritual_completed_text.setFormat(null, 48, FlxColor.BLACK, "center");
-			ritual_completed_text.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
+			ritual_completed_text.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.WHITE, 2);
 			add(ritual_completed_text);
 			
 			update_mouth = false;
@@ -246,7 +248,7 @@ class PlayState extends FlxState
 		if (FlxG.keys.justPressed.T)
 		{
 		//	var arry = Type.allEnums(EnergyOrbTypeEnum);
-		//	var def = FlxRandom.getObject(arry, 1, arry.length);
+		//	var def = FlxG.random.getObject(arry, 1, arry.length);
 		//	{
 		//		enemyBoss.add_token(def);
 		//	}
@@ -258,7 +260,7 @@ class PlayState extends FlxState
 		if (FlxG.keys.justPressed.Y)
 		{
 		//	var arry = Type.allEnums(EnergyOrbTypeEnum);
-		//	var def = FlxRandom.getObject(arry, 1, arry.length);
+		//	var def = FlxG.random.getObject(arry, 1, arry.length);
 		//	{
 		//		enemyBoss.add_token(def);
 		//	}
@@ -324,7 +326,7 @@ class PlayState extends FlxState
 	
 	public function commanded_orb_handler(x:Float, y:Float, command:String, orbtype:EnergyOrbTypeEnum) : Void
 	{
-		var txt = cast(command_layer.recycle(FlxText, [x, y, 300, command, 50]), FlxText);
+		var txt = cast(command_layer.recycle(FlxText, function() { return new FlxText(x, y, 300, command, 50); }), FlxText);
 		txt.revive();
 		txt.alpha = 1.0;
 		txt.text = command;
@@ -342,7 +344,7 @@ class PlayState extends FlxState
 				FlxColor.BLUE;
 		};
 		FlxTween.tween(txt, { alpha: 0 }, 1);
-		FlxTween.linearMotion(txt, x, y, x, y - 100, 1, true, { complete: function(tw:FlxTween)
+		FlxTween.linearMotion(txt, x, y, x, y - 100, 1, true, { onComplete: function(tw:FlxTween)
 		{
 			txt.kill();
 		} } );
@@ -354,7 +356,7 @@ class PlayState extends FlxState
 		
 		ritual_completed_text = new FlxText(0, FlxG.height/2, FlxG.width, "You Lose, Come on play again!");
 		ritual_completed_text.setFormat(null, 48, FlxColor.BLACK, "center");
-		ritual_completed_text.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
+		ritual_completed_text.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.WHITE, 2);
 		add(ritual_completed_text);
 		
 		update_mouth = false;

@@ -48,11 +48,6 @@ class Monster extends FlxSpriteGroup
 		}
 	}
 	
-	override public function update():Void 
-	{
-		super.update();
-	}
-	
 	public function remove_token(e:EnergyOrbTypeEnum):Bool
 	{
 		if (tokens.remove(e))

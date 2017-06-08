@@ -8,7 +8,6 @@ import flash.display.Sprite;
 import flash.geom.Matrix;
 import flash.geom.Rectangle;
 import flixel.FlxG;
-import flixel.util.FlxColorUtil;
 import flixel.util.FlxColor;
 import openfl.Assets;
 
@@ -70,9 +69,9 @@ class PlayerBody extends FlxSprite
 	/**
 	 * Function that is called once every frame.
 	 */
-	override public function update():Void
+	override public function update(elapsed:Float):Void
 	{
-		super.update();
+		super.update(elapsed);
 		
 		a0 += 1;
 		a1 -= 1;
@@ -105,7 +104,7 @@ class PlayerBody extends FlxSprite
 	
 	public function draw_body()
 	{
-		var skin_color = FlxColorUtil.makeFromHSBA(Reg.inputdata.v(SKIN_HUE), Reg.inputdata.v(SKIN_SATURATION), Reg.inputdata.v(SKIN_VALUE), 1.0);
+		var skin_color = FlxColor.fromHSB(Reg.inputdata.v(SKIN_HUE), Reg.inputdata.v(SKIN_SATURATION), Reg.inputdata.v(SKIN_VALUE), 1.0);
 		var torso_height = Reg.inputdata.v(TORSO_HEIGHT);
 		var chest_width = Reg.inputdata.v(CHEST_WIDTH);
 		var waist_width = Reg.inputdata.v(WAIST_WIDTH);
@@ -163,7 +162,7 @@ class PlayerBody extends FlxSprite
 	
 	public function draw_face()
 	{
-		var skin_color = FlxColorUtil.makeFromHSBA(Reg.inputdata.v(SKIN_HUE), Reg.inputdata.v(SKIN_SATURATION), Reg.inputdata.v(SKIN_VALUE), 1.0);
+		var skin_color = FlxColor.fromHSB(Reg.inputdata.v(SKIN_HUE), Reg.inputdata.v(SKIN_SATURATION), Reg.inputdata.v(SKIN_VALUE), 1.0);
 		var face_width = Reg.inputdata.v(FACE_WIDTH);
 		var face_height = Reg.inputdata.v(FACE_HEIGHT);
 		var torso_height = Reg.inputdata.v(TORSO_HEIGHT);
@@ -224,7 +223,7 @@ class PlayerBody extends FlxSprite
 	
 	public function draw_arms()
 	{
-		var skin_color = FlxColorUtil.makeFromHSBA(Reg.inputdata.v(SKIN_HUE), Reg.inputdata.v(SKIN_SATURATION), Reg.inputdata.v(SKIN_VALUE)*0.9, 1.0);
+		var skin_color = FlxColor.fromHSB(Reg.inputdata.v(SKIN_HUE), Reg.inputdata.v(SKIN_SATURATION), Reg.inputdata.v(SKIN_VALUE)*0.9, 1.0);
 		var torso_height = Reg.inputdata.v(TORSO_HEIGHT);
 		var chest_width = Reg.inputdata.v(CHEST_WIDTH);
 		
@@ -404,7 +403,7 @@ class PlayerBody extends FlxSprite
 	
 	public function draw_monster()
 	{
-		var skin_color = FlxColorUtil.makeFromHSBA(Reg.inputdata.v(MONSTER_SKIN_HUE), Reg.inputdata.v(MONSTER_SKIN_SATURATION), Reg.inputdata.v(MONSTER_SKIN_VALUE), 1.0);
+		var skin_color = FlxColor.fromHSB(Reg.inputdata.v(MONSTER_SKIN_HUE), Reg.inputdata.v(MONSTER_SKIN_SATURATION), Reg.inputdata.v(MONSTER_SKIN_VALUE), 1.0);
 		var torso_height = Reg.inputdata.v(MONSTER_TORSO_HEIGHT);
 		var chest_width = Reg.inputdata.v(MONSTER_CHEST_WIDTH);
 		var waist_width = Reg.inputdata.v(MONSTER_WAIST_WIDTH);
@@ -491,8 +490,13 @@ class PlayerBody extends FlxSprite
 	
 	public function draw_hands()
 	{
-		var skin_color = FlxColorUtil.makeFromHSBA(Reg.inputdata.v(SKIN_HUE), Reg.inputdata.v(SKIN_SATURATION), Reg.inputdata.v(SKIN_VALUE)*0.9, 1.0);
-		var skin_color_argb = FlxColorUtil.getARGB(skin_color);
+		var skin_color = FlxColor.fromHSB(Reg.inputdata.v(SKIN_HUE), Reg.inputdata.v(SKIN_SATURATION), Reg.inputdata.v(SKIN_VALUE)*0.9, 1.0);
+		var skin_color_argb = {
+			alpha: skin_color.alpha,
+			red: skin_color.red,
+			green: skin_color.green,
+			blue: skin_color.blue,
+		};
 		var torso_height = Reg.inputdata.v(TORSO_HEIGHT);
 		var chest_width = Reg.inputdata.v(CHEST_WIDTH);
 		

@@ -8,8 +8,8 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.ui.FlxButton;
-import flixel.util.FlxMath;
-import flixel.util.FlxRect;
+import flixel.math.FlxMath;
+import flixel.math.FlxRect;
 
 /**
  * A FlxState which can be used for the game's menu.
@@ -80,13 +80,13 @@ class MenuState extends FlxState
 	/**
 	 * Function that is called once every frame.
 	 */
-	override public function update():Void
+	override public function update(elapsed:Float):Void
 	{
-		super.update();
+		super.update(elapsed);
 		
 		cursor.x = cursor_x;
 		
-		if (rect1.containsFlxPoint(FlxG.mouse.getScreenPosition()))
+		if (rect1.containsPoint(FlxG.mouse.getScreenPosition()))
 		{
 			cursor.y = rect1.y;
 			
@@ -96,7 +96,7 @@ class MenuState extends FlxState
 			}
 		}
 		
-		if (rect2.containsFlxPoint(FlxG.mouse.getScreenPosition()))
+		if (rect2.containsPoint(FlxG.mouse.getScreenPosition()))
 		{
 			cursor.y = rect2.y;
 			

@@ -24,10 +24,8 @@ class SimpleFX extends FlxEmitter
 	{
 		super(X, Y, 50);
 		
-		setXSpeed(explosionspeedxmin,explosionspeedxmax);
-		setYSpeed(explosionspeedymin,explosionspeedymax);
-		
-		bounce = 0.8;
+		this.speed.set(explosionspeedxmin, explosionspeedymin, explosionspeedxmax, explosionspeedymax);
+		this.elasticity.set(0.8);
 	}
 	
 	public function initfx():Void
@@ -50,6 +48,6 @@ class SimpleFX extends FlxEmitter
 	
 	public function startfx():Void
 	{
-		start(true, particle_lifetime, 0.01);
+		start(true, particle_lifetime, 0); //0.01);
 	}	
 }

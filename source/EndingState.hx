@@ -46,7 +46,7 @@ class EndingState extends FlxState
 		
 		playerLHand = new PlayerHand(null, FlxG.width/2 - 150, 180);
 		playerLHand.create();
-		playerLHand.color = FlxColor.GOLDEN;
+		playerLHand.color = 0xffffd700; // FlxColor.GOLDEN;
 		playerLHand.visible = false;
 		playerLHand.type = "L";
 		playerLHand.controlMapping("W", "A", "S", "D", "F");
@@ -82,11 +82,11 @@ class EndingState extends FlxState
 	/**
 	 * Function that is called once every frame.
 	 */
-	override public function update():Void
+	override public function update(elapsed:Float):Void
 	{
-		super.update();
+		super.update(elapsed);
 		
-		FlxTween.tween(player_body, { monster_y:250 }, 2, { type:FlxTween.PINGPONG, ease:FlxEase.bounceInOut, complete:onCompleted , startDelay:1, loopDelay:2 } );
+		FlxTween.tween(player_body, { monster_y:250 }, 2, { type:FlxTween.PINGPONG, ease:FlxEase.bounceInOut, onComplete:onCompleted , startDelay:1, loopDelay:2 } );
 		if (activate_fade)
 		{
 			FlxG.camera.shake();
@@ -104,7 +104,7 @@ class EndingState extends FlxState
 		fading_sprite.visible = true;
 		var text = new FlxText(0, FlxG.height/2, FlxG.width, "Thanks for playing!");
 		text.setFormat(null, 48, FlxColor.BLACK, "center");
-		text.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
+		text.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.WHITE, 2);
 		add(text);
 	}
 }

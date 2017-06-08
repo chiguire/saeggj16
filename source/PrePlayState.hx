@@ -21,26 +21,27 @@ class PrePlayState extends FlxState
 		super.create();
 		var level_definition = Reg.level_definition = LevelManager.get_definition(Reg.level);
 		
-		var level_completed_timer = new FlxTimer(3.0, on_level_completed_timeup);
+		var level_completed_timer = new FlxTimer();
+		level_completed_timer.start(3.0, on_level_completed_timeup);
 		
 		{
 			var titleText = new FlxText(0, FlxG.height/2 - 120, FlxG.width, "Level " + (Reg.level+1));
 			titleText.setFormat(null, 48, FlxColor.BLACK, "center");
-			titleText.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
+			titleText.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.WHITE, 2);
 			add(titleText);
 		}
 		
 		{
 			var titleText = new FlxText(0, FlxG.height/2 - 60, FlxG.width-30, level_definition.TitleText);
 			titleText.setFormat(null, 32, FlxColor.BLACK, "center");
-			titleText.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
+			titleText.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.WHITE, 2);
 			add(titleText);
 		}
 		
 		{
 			var titleText = new FlxText(0, FlxG.height - 100, FlxG.width, level_definition.SubTitleText);
 			titleText.setFormat(null, 16, FlxColor.BLACK, "center");
-			titleText.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
+			titleText.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.WHITE, 2);
 			add(titleText);
 		}
 
@@ -56,14 +57,6 @@ class PrePlayState extends FlxState
 		super.destroy();
 	}
 
-	/**
-	 * Function that is called once every frame.
-	 */
-	override public function update():Void
-	{
-		super.update();
-	}
-	
 	function on_level_completed_timeup(t:FlxTimer):Void
 	{
 		if (Reg.level < 66)

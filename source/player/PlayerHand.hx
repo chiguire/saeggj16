@@ -6,8 +6,9 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.input.gamepad.FlxGamepad;
-import flixel.util.FlxPoint;
-import flixel.util.FlxVelocity;
+import flixel.input.gamepad.FlxGamepadInputID;
+import flixel.math.FlxPoint;
+import flixel.math.FlxVelocity;
 import orb.EnergyOrb;
 
 /**
@@ -57,9 +58,9 @@ class PlayerHand extends FlxSprite
 		key_touch = touch;
 	}
 	
-	override public function update():Void
+	override public function update(elapsed:Float):Void
 	{
-		super.update();
+		super.update(elapsed);
 		
 		velocity.x = velocity.y = 0;
 		//if ( FlxG.keys.anyPressed([key_up])) { velocity.y -= speed; }
@@ -106,8 +107,8 @@ class PlayerHand extends FlxSprite
 		// game pad
 		if (gamepad != null)
 		{
-			velocity.x += gamepad.getXAxis(GamepadIDs.LEFT_ANALOGUE_X) * speed;
-			velocity.y += gamepad.getYAxis(GamepadIDs.LEFT_ANALOGUE_Y) * speed;
+			velocity.x += gamepad.getXAxis(FlxGamepadInputID.LEFT_ANALOG_STICK) * speed;
+			velocity.y += gamepad.getYAxis(FlxGamepadInputID.LEFT_ANALOG_STICK) * speed;
 		}
 	}
 	
@@ -161,8 +162,8 @@ class PlayerHand extends FlxSprite
 		// game pad
 		if (gamepad != null)
 		{
-			velocity.x += gamepad.getXAxis(GamepadIDs.RIGHT_ANALOGUE_X) * speed;
-			velocity.y += gamepad.getYAxis(GamepadIDs.RIGHT_ANALOGUE_Y) * speed;
+			velocity.x += gamepad.getXAxis(FlxGamepadInputID.RIGHT_ANALOG_STICK) * speed;
+			velocity.y += gamepad.getYAxis(FlxGamepadInputID.RIGHT_ANALOG_STICK) * speed;
 		}
 	}
 	

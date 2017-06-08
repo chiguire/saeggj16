@@ -33,9 +33,9 @@ class EnergyCollector extends FlxSprite
 		loadGraphic("assets/images/energy_collector.png");
 	}
 	
-	override public function update():Void 
+	override public function update(elapsed:Float):Void 
 	{
-		super.update();
+		super.update(elapsed);
 		
 		var lhandOverlapping = FlxG.overlap(this, playerLHand);
 		var rhandOverlapping = FlxG.overlap(this, playerRHand);

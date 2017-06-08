@@ -19,12 +19,12 @@ class PlayerHandMouse extends FlxSprite
 	
 	public function create():Void
 	{
-		makeGraphic(32, 32, FlxColor.HOT_PINK);
+		makeGraphic(32, 32, 0xfffc0fc0 /*FlxColor.HOT_PINK*/);
 	}
 	
-	override public function update():Void
+	override public function update(elapsed:Float):Void
 	{
-		super.update();
+		super.update(elapsed);
 		
 		setPosition(FlxG.mouse.x, FlxG.mouse.y);
 	}

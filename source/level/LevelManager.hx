@@ -1,5 +1,6 @@
 package level;
-import flixel.util.FlxRandom;
+import flixel.FlxG;
+import flixel.math.FlxRandom;
 import orb.EnergyOrbTypeEnum;
 
 /**
@@ -51,8 +52,8 @@ class LevelManager
 		if (i >= 0 && i < levels.length) return levels[i];
 		else
 		{
-			var numTokens = FlxRandom.intRanged(4, 16);
-			var f = FlxRandom.floatRanged(0.3, 0.6);
+			var numTokens = FlxG.random.int(4, 16);
+			var f = FlxG.random.float(0.3, 0.6);
 			var tokens = generate_random_tokens(numTokens);
 			return { TitleText:Reg.level_titles[(i-levels.length)%Reg.level_titles.length], 
 			SubTitleText:"Complete the ritual before the time runs out!", 
@@ -69,7 +70,7 @@ class LevelManager
 		var tokens = new Array<EnergyOrbTypeEnum>();
 		for (i in 0...numItems)
 		{
-			var def = FlxRandom.getObject(arry, 1, arry.length);
+			var def = FlxG.random.getObject(arry, 1, arry.length);
 			tokens.push(def);
 		}
 		

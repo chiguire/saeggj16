@@ -5,7 +5,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxColor;
-import flixel.util.FlxRandom;
+import flixel.math.FlxRandom;
 import flixel.util.FlxTimer;
 
 using flixel.util.FlxSpriteUtil;
@@ -41,12 +41,13 @@ class EnergySpawner extends FlxSpriteGroup
 			orb.kill();
 		}
 		
-		spawnTimer = new FlxTimer(spawn_time, on_spawn_timeup);
+		spawnTimer = new FlxTimer();
+		spawnTimer.start(spawn_time, on_spawn_timeup);
 	}
 	
-	override public function update():Void 
+	override public function update(elapsed:Float):Void 
 	{
-		super.update();
+		super.update(elapsed);
 		
 		//if(FlxG.mouse.justPressed)
 		//{
@@ -71,10 +72,10 @@ class EnergySpawner extends FlxSpriteGroup
 		{
 			newOrb.revive();
 			newOrb.resetStateData();
-			newOrb.angularVelocity = FlxRandom.intRanged( -2, 2);
+			newOrb.angularVelocity = FlxG.random.int( -2, 2);
 			
-			newOrb.x = FlxG.width/2 + FlxRandom.intRanged(-128, 128);
-			newOrb.y = FlxRandom.intRanged(0, Std.int(FlxG.height / 2));
+			newOrb.x = FlxG.width/2 + FlxG.random.int(-128, 128);
+			newOrb.y = FlxG.random.int(0, Std.int(FlxG.height / 2));
 		}
 	}
 	

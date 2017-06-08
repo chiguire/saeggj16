@@ -4,14 +4,14 @@ import flixel.effects.FlxFlicker;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
-import flixel.util.FlxMath;
-import flixel.util.FlxPoint;
+import flixel.math.FlxMath;
+import flixel.math.FlxPoint;
 import flixel.util.FlxSignal.FlxTypedSignal;
 import flixel.util.FlxTimer;
 import player.EnergyCollector;
 import player.EnerygyCollectorState.EnergyCollectorState;
 
-import flixel.util.FlxVelocity;
+import flixel.math.FlxVelocity;
 
 
 using flixel.util.FlxSpriteUtil;
@@ -67,11 +67,14 @@ class EnergyOrb extends FlxSprite
 		
 		parent_state = parentState;
 		
-		recording_state_timer = new FlxTimer(recording_state_idle_time, on_recording_state_idle_timeup);
+		recording_state_timer = new FlxTimer();
+		recording_state_timer.start(recording_state_idle_time, on_recording_state_idle_timeup);
 		recording_state_timer.active = false;
-		collectable_state_timer = new FlxTimer(collectable_state_time, on_collectable_state_timeup);
+		collectable_state_timer = new FlxTimer();
+		collectable_state_timer.start(collectable_state_time, on_collectable_state_timeup);
 		collectable_state_timer.active = false;
-		retreat_state_timer = new FlxTimer(1.0, on_retreat_state_timeup);
+		retreat_state_timer = new FlxTimer();
+		retreat_state_timer.start(1.0, on_retreat_state_timeup);
 		retreat_state_timer.active = false;
 	}
 	
@@ -102,9 +105,9 @@ class EnergyOrb extends FlxSprite
 		retreat_state_timer.active = false;
 	}
 	
-	override public function update():Void 
+	override public function update(elapsed:Float):Void 
 	{
-		super.update();
+		super.update(elapsed);
 		
 		curr_player_energy_collector = null;
 		for (obj in parent_state.playerEnergyCollectors.members)

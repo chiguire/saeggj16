@@ -43,7 +43,8 @@ class SplashState extends FlxState
 		add(top);
 		
 		FlxTween.tween(top, { alpha: 0 }, 0.3);
-		timer = new FlxTimer(3, show_timer_handler, 1);
+		timer = new FlxTimer();
+		timer.start(3, show_timer_handler, 1);
 	}
 	
 	/**
@@ -58,9 +59,9 @@ class SplashState extends FlxState
 	/**
 	 * Function that is called once every frame.
 	 */
-	override public function update():Void
+	override public function update(elapsed:Float):Void
 	{
-		super.update();
+		super.update(elapsed);
 		
 		if (FlxG.keys.justPressed.ANY || FlxG.mouse.justPressed)
 		{
@@ -70,7 +71,7 @@ class SplashState extends FlxState
 	
 	public function show_timer_handler(?timer:FlxTimer)
 	{
-		FlxTween.tween(top, { alpha: 1 }, 0.3, { complete: fade_out_handler });
+		FlxTween.tween(top, { alpha: 1 }, 0.3, { onComplete: fade_out_handler });
 	}
 	
 	public function fade_out_handler(?tween:FlxTween)

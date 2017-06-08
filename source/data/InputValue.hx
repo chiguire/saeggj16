@@ -1,6 +1,7 @@
 package data;
-import flixel.util.FlxMath;
-import flixel.util.FlxRandom;
+import flixel.FlxG;
+import flixel.math.FlxMath;
+import flixel.math.FlxRandom;
 
 /**
  * ...
@@ -88,7 +89,7 @@ class InputValue
 	
 	public function fill_random()
 	{
-		value = if (ranged) min + (max - min) * FlxRandom.float() else FlxRandom.float();
+		value = if (ranged) min + (max - min) * FlxG.random.float() else FlxG.random.float();
 	}
 	
 	private function clamp(v:Float)
